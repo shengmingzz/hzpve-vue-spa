@@ -5,8 +5,8 @@
         <div class="line"></div>
         <div class="tip">奖励说明</div>
     </div>
-    <div class="desc">1、您的竞技场历史最高排名为:10001,提高历史最高排名可获得大量奖励!</div>
-    <div class="desc">2、每日晚上21:00,根据您的竞技场排行,系统将会通过邮件发放每日奖励!</div>
+    <div class="desc">1、提高竞技场历史最高排名可获得大量奖励！</div>
+    <div class="desc">2、每日晚上21:00，根据您的竞技场排行，系统将会通过邮件发放每日排名奖励！</div>
 
     <div class="ranklist" style="margin-top:1.5rem;margin-bottom:0.45rem;">
       <div class="rankleft" style="color:#999;font-size:0.6rem">排名</div>
@@ -40,15 +40,16 @@
         <div class="line"></div>
         <div class="tip">战斗规则</div>
     </div>
-    <div class="desc">1、需要分别设置进攻队伍和防守队伍,2个队伍相互独立!</div>
-    <div class="desc">2、在竞技场中无法进行操作,只能自动战斗</div>
-    <div class="desc">3、只有进攻方玩家获胜且进攻方的当前排名低于防守方玩家,双方排名才会互换。</div>
+    <div class="desc">1、需要分别设置进攻队伍和防守队伍，2个队伍相互独立！</div>
+    <div class="desc">2、在竞技场中无法进行操作，只能自动战斗！</div>
+    <div class="desc">3、只有进攻方玩家获胜并且进攻方的当前排名低于防守方玩家，双方排名才会互换。</div>
     <div class="desc">4、五分钟内战斗结束,按进攻失败处理!</div>
-    <div class="desc">5、每日凌晨2点,刷新五次免费的进攻机会,每次战斗结算都需要等待CD后,才能继续挑战</div>
+    <div class="desc">5、每日凌晨2点,刷新五次免费的进攻机会,每次战斗结算都需要等待CD后,才能继续挑战。</div>
   </div>
 </template>
 
 <script>
+import {jjcData} from '../data/jjc'
 export default {
   data () {
     return {
@@ -67,7 +68,7 @@ export default {
   },
   methods: {
     loadData () {
-      this.rewards = window.CosBox.getJjcRewards()
+      this.rewards = jjcData
     }
   }
 }

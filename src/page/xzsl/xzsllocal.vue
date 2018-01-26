@@ -3,9 +3,9 @@
     <img src="../../img/thumb_xzsl@2x.png" style="width:100%">
     <div class="section">
         <div class="line"></div>
-        <div class="tip">试炼说明说明</div>
+        <div class="tip">试炼说明</div>
     </div>
-    <div class="desc">需要多人协作才能挑战星座的守护者;每日凌晨2点可以重新获得2次挑战机会;挑战时,所有英雄属性修正战斗力相同!</div>
+    <div class="desc">需要多人协作才能挑战星座守护者;每日凌晨2点可以重新获得2次挑战机会;挑战时，所有英雄修改为30级属性!</div>
     <div class="section">
         <div class="line"></div>
         <div class="tip">开放时间</div>
@@ -23,7 +23,7 @@
           <div class="itemdesc">{{item.description}}</div>
         </div>
       </div>
-      <div @click="clickmore()" class="bossname" style="font-size:0.75rem;color:#333">{{showmore?'收起更多':'显示更多'}}</div>
+      <!-- <div @click="clickmore()" class="bossname" style="font-size:0.75rem;color:#333">{{showmore?'收起更多':'显示更多'}}</div> -->
     </div>
 
     <div class="section">
@@ -43,12 +43,14 @@
 </template>
 
 <script>
+import {bossData} from '../data/boss'
+import {getMapDrop} from '../data/drop'
 export default {
   data () {
     return {
       boss: [],
       items: [],
-      showmore: false,
+      showmore: true,
       logo: 'this.src="' + require('../../img/default.png') + '"'
     }
   },
@@ -59,8 +61,8 @@ export default {
   },
   methods: {
     loadData () {
-      this.boss = window.CosBox.getBossInfo()
-      this.items = window.CosBox.getBossDrops()
+      this.boss = bossData
+      this.items = getMapDrop('50001,50005,50006')
     },
     clickmore () {
       this.showmore = !this.showmore

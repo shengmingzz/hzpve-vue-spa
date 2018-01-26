@@ -12,6 +12,14 @@ const xzsl = r => require.ensure([], () => r(require('@/page/xzsl/xzsl')), 'xzsl
 const yxtj = r => require.ensure([], () => r(require('@/page/yxtj/yxtj')), 'yxtj')
 const hero = r => require.ensure([], () => r(require('@/page/hero/hero')), 'hero')
 
+const jjclocal = r => require.ensure([], () => r(require('@/page/jjc/jjclocal')), 'jjclocal')
+const hdyjlocal = r => require.ensure([], () => r(require('@/page/hdyj/hdyjlocal')), 'hdyjlocal')
+const xzsllocal = r => require.ensure([], () => r(require('@/page/xzsl/xzsllocal')), 'xzsllocal')
+const mxzllocal = r => require.ensure([], () => r(require('@/page/mxzl/mxzllocal')), 'mxzllocal')
+const yxtjlocal = r => require.ensure([], () => r(require('@/page/yxtj/yxtjlocal')), 'yxtjlocal')
+const herolocal = r => require.ensure([], () => r(require('@/page/hero/herolocal')), 'herolocal')
+const home = r => require.ensure([], () => r(require('@/page/home/home')), 'home')
+
 const routes = [
   {
     path: '/',
@@ -32,7 +40,24 @@ const routes = [
       // yxtj
       {path: '/yxtj', component: yxtj},
       // hero
-      {path: '/hero', component: hero}
+      {path: '/hero', component: hero},
+
+      // jjclocal
+      {path: '/jjclocal', component: jjclocal},
+      // jjclocal
+      {path: '/hdyjlocal', component: hdyjlocal},
+      // yxtjlocal
+      {path: '/yhjtlocal', component: yhjt},
+      // xzsllocal
+      {path: '/xzsllocal', component: xzsllocal},
+      // mxzllocal
+      {path: '/mxzllocal', component: mxzllocal},
+      // yxtjlocal
+      {path: '/yxtjlocal', component: yxtjlocal},
+      // herolocal
+      {path: '/herolocal', component: herolocal},
+      // home
+      {path: '/home', component: home}
     ]
   }
 ]

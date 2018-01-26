@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import {heroData} from '../data/hero'
 export default {
   data () {
     return {
@@ -34,7 +35,7 @@ export default {
   },
   methods: {
     loadData () {
-      this.heros = window.CosBox.getHerosBook()
+      this.heros = heroData
       var array = []
       if (Array.isArray(this.heros)) {
         var star = -1
@@ -58,8 +59,12 @@ export default {
       this.starheros = [...array]
     },
     clickHeroItem (item) {
-      window.location.href = 'hzbox://com.nd.he.box/pvehero?code=' + item.code
-      // this.$router.push({path: '/hero', query: {'code': item.code}})
+      var agent = navigator.userAgent
+      if (agent.indexOf('hehbox') >= 0) {
+        window.location.href = 'hzbox://com.nd.he.box/pvehero?code=' + item.code
+      } else {
+        this.$router.push({path: '/herolocal', query: {'code': item.code}})
+      }
     }
   }
 }

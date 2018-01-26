@@ -72,7 +72,9 @@
 </template>
 
 <script>
-// var _ = require('lodash-node')
+import {chaterData} from '../data/chater'
+import {dropData} from '../data/drop'
+var _ = require('lodash-node')
 export default {
   data () {
     return {
@@ -97,8 +99,8 @@ export default {
   },
   methods: {
     loadData () {
-      this.datas = window.CosBox.getChapter()
-      this.drops = window.CosBox.getBossDrops()
+      this.datas = chaterData
+      this.drops = dropData
     },
     tapArticle (key, subkey) {
       if (this.index === key && this.subindex === subkey) {
@@ -221,17 +223,20 @@ export default {
           dropcodes.push(parseInt(item.drop_item_5))
         }
         var dropitems = []
-        dropitems = window.CosBox.queryBossDrops(dropcodes.join(','))
-        // for (var j = 0; j < this.drops.length; i++) {
-        //   var exist = _.indexOf(dropcodes, parseInt(this.drops[j].code))
-        //   if (exist >= 0) {
-        //     dropitems.push(this.drops[j])
-        //   }
-        // }
+        // dropitems = window.CosBox.queryBossDrops(dropcodes.join(','))
+        // dropitems = this.getItem(dropcodes.join(','))
+        for (var j = 0; j < this.drops.length; j++) {
+          var exist = _.indexOf(dropcodes, parseInt(this.drops[j].code))
+          if (exist >= 0) {
+            dropitems.push(this.drops[j])
+          }
+        }
         return dropitems
       } else {
         return []
       }
+    },
+    getItem (data) {
     }
   }
 }

@@ -6,13 +6,13 @@
         <div class="line"></div>
         <div class="tip">战斗规则</div>
     </div>
-    <div class="desc">1、英雄的星级越高,能力和潜力越强。</div>
-    <div class="desc">2、使用魔石召唤每满5次,必得一个4星英雄或5星英雄。</div>
-    <div class="desc">3、玩家每日最多使用水晶召唤10次,使用魔石召唤250次。</div>
-    <div class="desc">4、玩家每日有一次免费的魔石召唤机会和5次免费的水晶召唤机会(不计算召唤次数)。</div>
-    <div class="desc">5、玩家每日有1次5折魔石召唤机会。</div>
+    <div class="desc">1、英雄的星级越高，能力和潜力越强。</div>
+    <div class="desc">2、使用模式召唤每满5次，必得一个4星英雄或5星英雄。</div>
+    <div class="desc">3、玩家每日最多使用水晶召唤10次，使用魔石召唤250次。</div>
+    <div class="desc">4、玩家每次有1次免费的模式召唤机会和5次免费的水晶召唤机会（不计算召唤次数）。</div>
+    <div class="desc">5、玩家每日有1次五折魔石召唤机会。</div>
     <div class="desc">6、上述折扣召唤机会不叠加不顺延。</div>
-    <div class="desc">7、召唤次数的重置时间为每日2:00。</div>
+    <div class="desc">7、召唤次数的重置时间为每日2：00。</div>
   </div>
 </template>
 
