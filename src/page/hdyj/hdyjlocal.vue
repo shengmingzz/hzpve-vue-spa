@@ -129,7 +129,7 @@ export default {
         str += item.feat_value + '军衔经验'
       }
       if (item.rank_value > 0) {
-        str += '\n军衔帮前' + item.rank_value
+        str += '\n军衔榜前' + item.rank_value
       }
       return str
     },

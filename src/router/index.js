@@ -4,6 +4,22 @@ import App from '../App'
 
 Vue.use(Router)
 
+// const hdyj = r => require.ensure([], () => r(require('@/page/hdyj/hdyj')), 'pve')
+// const jjc = r => require.ensure([], () => r(require('@/page/jjc/jjc')), 'pve')
+// const mxzl = r => require.ensure([], () => r(require('@/page/mxzl/mxzl')), 'pve')
+// const yhjt = r => require.ensure([], () => r(require('@/page/yhjt/yhjt')), 'pve')
+// const xzsl = r => require.ensure([], () => r(require('@/page/xzsl/xzsl')), 'pve')
+// const yxtj = r => require.ensure([], () => r(require('@/page/yxtj/yxtj')), 'pve')
+// const hero = r => require.ensure([], () => r(require('@/page/hero/hero')), 'pve')
+//
+// const jjclocal = r => require.ensure([], () => r(require('@/page/jjc/jjclocal')), 'pvelocal')
+// const hdyjlocal = r => require.ensure([], () => r(require('@/page/hdyj/hdyjlocal')), 'pvelocal')
+// const xzsllocal = r => require.ensure([], () => r(require('@/page/xzsl/xzsllocal')), 'pvelocal')
+// const mxzllocal = r => require.ensure([], () => r(require('@/page/mxzl/mxzllocal')), 'pvelocal')
+// const yxtjlocal = r => require.ensure([], () => r(require('@/page/yxtj/yxtjlocal')), 'pvelocal')
+// const herolocal = r => require.ensure([], () => r(require('@/page/hero/herolocal')), 'pvelocal')
+// const home = r => require.ensure([], () => r(require('@/page/home/home')), 'pvelocal')
+
 const hdyj = r => require.ensure([], () => r(require('@/page/hdyj/hdyj')), 'hdyj')
 const jjc = r => require.ensure([], () => r(require('@/page/jjc/jjc')), 'jjc')
 const mxzl = r => require.ensure([], () => r(require('@/page/mxzl/mxzl')), 'mxzl')
@@ -25,6 +41,7 @@ const routes = [
     path: '/',
     name: 'App',
     component: App,
+    redirect: '/home',
     meta: [],
     children: [
       // hdyj
@@ -64,7 +81,8 @@ const routes = [
 
 export default new Router({
   routes,
-  mode: 'history',
+  // mode: 'history',
+  // base: '/static/pve/',
   strict: process.env.NODE_ENV !== 'production',
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {

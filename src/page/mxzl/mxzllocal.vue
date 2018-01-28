@@ -58,7 +58,14 @@
           </div>
         </div>
         <div class="reward" v-for="(drop,ind) in showdrops(key, subkey)" :key="ind">
-          <img class="rewardimg" :src="drop.icon" :onerror="logo" >
+          <!-- <img class="rewardimg" :src="drop.icon" :onerror="logo" > -->
+          <div style="position:relative;width:2.5rem; height:2.5rem;border-radius: .2rem; border:0.02rem; solid #ccc; text-align:center;margin-right:.1rem;">
+            <img :src="drop.icon" :onerror="logo" width="100%" height="100%">
+            <img v-show="drop.is_new === 1" src="../../img/icon_first_pass@2x.png" :onerror="logo" style="position:absolute;width:1.5rem;height:1.5rem;left:0rem;top:0rem;">
+            <span style="width:100%; height:0.6rem; line-height:0.6rem; position:absolute; bottom:0rem; left:0rem; right:0rem; color:#fff;font-size:0.5rem;text-align:center;">
+              {{drop.num > 0 ? drop.num : ''}}
+            </span>
+          </div>
           <div class="item">
             <div class="itemtitle">{{drop.name}}</div>
             <div class="itemdesc">{{drop.description}}</div>
@@ -74,7 +81,7 @@
 <script>
 import {chaterData} from '../data/chater'
 import {dropData} from '../data/drop'
-var _ = require('lodash-node')
+// var _ = require('lodash-node')
 export default {
   data () {
     return {
@@ -98,11 +105,11 @@ export default {
     this.loadData()
   },
   methods: {
-    loadData () {
+    loadData () { // 加载数据
       this.datas = chaterData
       this.drops = dropData
     },
-    tapArticle (key, subkey) {
+    tapArticle (key, subkey) { // 点击章节
       if (this.index === key && this.subindex === subkey) {
         this.index = -1
         this.subindex = -1
@@ -113,13 +120,13 @@ export default {
       this.artickkey = this.index + '-' + this.subindex + '-' + this.difficult
       this.missionDrops = [...this.getdrops(this.datas[this.index].mission[this.subindex])]
     },
-    isShowDetail (key, subkey) {
+    isShowDetail (key, subkey) { // 是否显示关卡
       if (this.index === key && this.subindex === subkey) {
         return true
       }
       return false
     },
-    clickDifficultNormal () {
+    clickDifficultNormal () { // 点击普通
       if (this.difficult === 1) {
         return
       }
@@ -127,7 +134,7 @@ export default {
       this.artickkey = this.index + '-' + this.subindex + '-' + this.difficult
       this.missionDrops = [...this.getdrops(this.datas[this.index].mission[this.subindex])]
     },
-    clickDifficultHard () {
+    clickDifficultHard () { // 点击困难
       if (this.difficult === 21) {
         return
       }
@@ -135,7 +142,7 @@ export default {
       this.artickkey = this.index + '-' + this.subindex + '-' + this.difficult
       this.missionDrops = [...this.getdrops(this.datas[this.index].mission[this.subindex])]
     },
-    conditionOneDesc (item) {
+    conditionOneDesc (item) { // 关卡条件描述
       var desc = ''
       var details = item.details
       if (Array.isArray(details)) {
@@ -174,7 +181,7 @@ export default {
       }
       return desc
     },
-    conditionPowerDesc (item) {
+    conditionPowerDesc (item) { // 关卡能力值描述
       var desc = ''
       var details = item.details
       if (Array.isArray(details)) {
@@ -187,13 +194,13 @@ export default {
       }
       return desc
     },
-    showdrops (index, subindex) {
+    showdrops (index, subindex) { // 是否显示关卡掉落
       if (this.index === index && this.subindex === subindex) {
         return this.missionDrops
       }
       return []
     },
-    getdrops (mission) {
+    getdrops (mission) { // 获取关卡掉落
       var item = {}
       var find = false
       var details = mission.details
@@ -207,34 +214,65 @@ export default {
       }
       if (find) {
         var dropcodes = []
+        var dropitems = []
         if (parseInt(item.drop_item_1) > 0) {
           dropcodes.push(parseInt(item.drop_item_1))
+          let equip = this.findequit(parseInt(item.drop_item_1), 1, item.num_1, item.is_new_1)
+          if (equip !== false) {
+            dropitems.push(equip)
+          }
         }
         if (parseInt(item.drop_item_2) > 0) {
           dropcodes.push(parseInt(item.drop_item_2))
+          let equip = this.findequit(parseInt(item.drop_item_2), 2, item.num_2, item.is_new_2)
+          if (equip !== false) {
+            dropitems.push(equip)
+          }
         }
         if (parseInt(item.drop_item_3) > 0) {
           dropcodes.push(parseInt(item.drop_item_3))
+          let equip = this.findequit(parseInt(item.drop_item_3), 3, item.num_3, item.is_new_3)
+          if (equip !== false) {
+            dropitems.push(equip)
+          }
         }
         if (parseInt(item.drop_item_4) > 0) {
           dropcodes.push(parseInt(item.drop_item_4))
+          let equip = this.findequit(parseInt(item.drop_item_4), 4, item.num_4, item.is_new_4)
+          if (equip !== false) {
+            dropitems.push(equip)
+          }
         }
         if (parseInt(item.drop_item_5) > 0) {
           dropcodes.push(parseInt(item.drop_item_5))
-        }
-        var dropitems = []
-        // dropitems = window.CosBox.queryBossDrops(dropcodes.join(','))
-        // dropitems = this.getItem(dropcodes.join(','))
-        for (var j = 0; j < this.drops.length; j++) {
-          var exist = _.indexOf(dropcodes, parseInt(this.drops[j].code))
-          if (exist >= 0) {
-            dropitems.push(this.drops[j])
+          let equip = this.findequit(parseInt(item.drop_item_5), 5, item.num_5, item.is_new_5)
+          if (equip !== false) {
+            dropitems.push(equip)
           }
         }
+        // for (var j = 0; j < this.drops.length; j++) {
+        //   var exist = _.indexOf(dropcodes, parseInt(this.drops[j].code))
+        //   if (exist >= 0) {
+        //     var equit = this.drops[j]
+        //     // item.is_new_2
+        //     dropitems.push(equit)
+        //   }
+        // }
         return dropitems
       } else {
         return []
       }
+    },
+    findequit (code, index, num, isnew) { // 填充掉落数据
+      for (var j = 0; j < this.drops.length; j++) {
+        if (code === parseInt(this.drops[j].code)) {
+          var equit = this.drops[j]
+          equit['is_new'] = isnew
+          equit['num'] = num
+          return equit
+        }
+      }
+      return false
     },
     getItem (data) {
     }

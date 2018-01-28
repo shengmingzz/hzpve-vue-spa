@@ -1,13 +1,13 @@
 <template>
   <div>
     <transition name="router-fade" mode="out-in">
-			<keep-alive>
+      <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
-			</keep-alive>
+      </keep-alive>
     </transition>
     <transition name="router-fade" mode="out-in">
-			<router-view v-if="!$route.meta.keepAlive"></router-view>
-		</transition>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </transition>
   </div>
 </template>
 
