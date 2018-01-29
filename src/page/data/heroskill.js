@@ -1,8 +1,9 @@
 export function getHeroSkill(str) {
   var skills = []
+  var strs = str.split(',')
   for (var i = 0; i < heroSkill.length; i++) {
     var item = heroSkill[i]
-    if (str.indexOf(item.code) >= 0) {
+    if (strs.indexOf(parseInt(item.code) + '') >= 0) {
       skills.push(item)
     }
   }
