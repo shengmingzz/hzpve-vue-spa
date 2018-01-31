@@ -15,19 +15,19 @@
     <div class="ranklist" style="height:2.8rem;" v-for="(item,key) in rewards" :key="key">
       <div class="rankleft">{{item.rank}}</div>
       <div class="rankright">
-        <div style="position:relative;width:1.6rem; height:1.6rem; border:0.02rem solid #ccc; text-align:center;">
+        <div style="position:relative;width:1.6rem; height:1.6rem; border:0.02rem solid #ccc; text-align:center;margin-right:0.1rem;">
           <img src="../../img/weekly_salary_crystal@2x.png" width="100%" height="100%">
           <span style="width:100%; height:0.6rem; line-height:0.6rem; position:absolute; bottom:0rem; left:0rem; right:0rem; color:#fff;font-size:0.5rem;text-align:center;">
             {{item.reward_num1}}
           </span>
         </div>
-        <div style="position:relative;width:1.6rem; height:1.6rem; border:0.02rem solid #ccc; text-align:center;">
+        <div style="position:relative;width:1.6rem; height:1.6rem; border:0.02rem solid #ccc; text-align:center;margin-right:0.1rem;">
           <img src="../../img/weekly_salary_jjc@2x.png" width="100%" height="100%">
           <span style="width:100%; height:0.6rem; line-height:0.6rem; position:absolute; bottom:0rem; left:0rem; right:0rem; color:#fff;font-size:0.5rem;text-align:center;">
             {{item.reward_num2}}
           </span>
         </div>
-        <div style="position:relative;width:1.6rem; height:1.6rem; border:0.02rem solid #ccc; text-align:center;">
+        <div style="position:relative;width:1.6rem; height:1.6rem; border:0.02rem solid #ccc; text-align:center;margin-right:0.1rem;">
           <img src="../../img/weekly_salary_dimensity@2x.png" width="100%" height="100%">
           <span style="width:100%; height:0.6rem; line-height:0.6rem; position:absolute; bottom:0rem; left:0rem; right:0rem; color:#fff;font-size:0.5rem;text-align:center;">
             {{item.reward_num3}}

@@ -28,6 +28,7 @@ const xzsl = r => require.ensure([], () => r(require('@/page/xzsl/xzsl')), 'xzsl
 const yxtj = r => require.ensure([], () => r(require('@/page/yxtj/yxtj')), 'yxtj')
 const hero = r => require.ensure([], () => r(require('@/page/hero/hero')), 'hero')
 
+// pve local
 const jjclocal = r => require.ensure([], () => r(require('@/page/jjc/jjclocal')), 'jjclocal')
 const hdyjlocal = r => require.ensure([], () => r(require('@/page/hdyj/hdyjlocal')), 'hdyjlocal')
 const xzsllocal = r => require.ensure([], () => r(require('@/page/xzsl/xzsllocal')), 'xzsllocal')
@@ -35,6 +36,11 @@ const mxzllocal = r => require.ensure([], () => r(require('@/page/mxzl/mxzllocal
 const yxtjlocal = r => require.ensure([], () => r(require('@/page/yxtj/yxtjlocal')), 'yxtjlocal')
 const herolocal = r => require.ensure([], () => r(require('@/page/hero/herolocal')), 'herolocal')
 const home = r => require.ensure([], () => r(require('@/page/home/home')), 'home')
+
+// pvp local
+const pvphero = r => require.ensure([], () => r(require('@/page/game/pvphero')), 'pvphero')
+const pvpitem = r => require.ensure([], () => r(require('@/page/game/pvpitem')), 'pvpitem')
+const itemdetail = r => require.ensure([], () => r(require('@/page/game/pveitemdetail')), 'itemdetail')
 
 const routes = [
   {
@@ -74,14 +80,19 @@ const routes = [
       // herolocal
       {path: '/herolocal', component: herolocal},
       // home
-      {path: '/home', component: home}
+      {path: '/home', component: home},
+
+      // pvp
+      {path: '/pvphero', component: pvphero}, // pvphero
+      {path: '/pvpitem', component: pvpitem}, // pvpitem
+      {path: '/itemdetail', component: itemdetail} // itemdetail
     ]
   }
 ]
 
 export default new Router({
   routes,
-  // mode: 'history',
+  mode: 'history',
   // base: '/static/pve/',
   strict: process.env.NODE_ENV !== 'production',
   scrollBehavior (to, from, savedPosition) {

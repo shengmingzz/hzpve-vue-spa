@@ -40,7 +40,7 @@
       <div class="rankfirst" style="color:#333;font-size:0.5rem">
         <img :src="iconsrc(item)" style="width:1.6rem;height:1.6rem;overflow: hidden;margin-left:0.6rem;margin-right:0.4rem;">
         {{item.name}}</div>
-      <div class="rankleft" style="color:#333;font-size:0.5rem">{{descRank(item)}}</div>
+      <pre class="rankleft" style="color:#333;font-size:0.5rem">{{descRank(item)}}</pre>
       <div class="rankleft">
         <img :src="knifesrc(item)" style="width:2.2rem;height:0.75rem;overflow: hidden;">
       </div>
@@ -129,7 +129,7 @@ export default {
         str += item.feat_value + '军衔经验'
       }
       if (item.rank_value > 0) {
-        str += '\n军衔榜前' + item.rank_value
+        str += '\n周军衔榜前' + item.rank_value
       }
       return str
     },
