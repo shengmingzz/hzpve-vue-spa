@@ -66,26 +66,26 @@ const routes = [
       {path: '/hero', component: hero},
 
       // jjclocal
-      {path: '/jjclocal', component: jjclocal},
+      {path: '/jjclocal', component: jjclocal, meta: { keepAlive: true, title: '竞技场' }},
       // jjclocal
-      {path: '/hdyjlocal', component: hdyjlocal},
+      {path: '/hdyjlocal', component: hdyjlocal, meta: { keepAlive: true, title: '竞技场' }},
       // yxtjlocal
-      {path: '/yhjtlocal', component: yhjt},
+      {path: '/yhjtlocal', component: yhjt, meta: { keepAlive: true, title: '英魂祭坛' }},
       // xzsllocal
-      {path: '/xzsllocal', component: xzsllocal},
+      {path: '/xzsllocal', component: xzsllocal, meta: { keepAlive: true, title: '星座试炼' }},
       // mxzllocal
-      {path: '/mxzllocal', component: mxzllocal},
+      {path: '/mxzllocal', component: mxzllocal, meta: { keepAlive: true, title: '冒险之旅' }},
       // yxtjlocal
-      {path: '/yxtjlocal', component: yxtjlocal},
+      {path: '/yxtjlocal', component: yxtjlocal, meta: { keepAlive: true, title: '英雄图鉴' }},
       // herolocal
-      {path: '/herolocal', component: herolocal},
+      {path: '/herolocal', component: herolocal, meta: { title: '英雄详情' }},
       // home
       {path: '/home', component: home},
 
       // pvp
-      {path: '/pvphero', component: pvphero}, // pvphero
-      {path: '/pvpitem', component: pvpitem}, // pvpitem
-      {path: '/itemdetail', component: itemdetail} // itemdetail
+      {path: '/pvphero', component: pvphero, meta: { keepAlive: true, title: 'pvp英雄' }}, // pvphero
+      {path: '/pvpitem', component: pvpitem, meta: { keepAlive: true, title: 'pvp物品' }}, // pvpitem
+      {path: '/itemdetail', component: itemdetail, meta: { title: '物品详情' }} // itemdetail
     ]
   }
 ]

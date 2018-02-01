@@ -38,6 +38,21 @@ export function getItemByType(type) {
   }
   return  array
 }
+export function getItemSubEquip(item) {
+  if (item.synthetic_formula) {
+    var subitems = item.synthetic_formula
+    var subs = subitems.split(',')
+    var subdetail = []
+    for (var i = 0; i < subs.length; i++) {
+      var subitem = getPvpItem(parseInt(subs[i]))
+      subdetail.push(getItemSubEquip(subitem))
+    }
+    item['subs'] = subdetail
+    return item
+  } else {
+    return item
+  }
+}
 export var pvpitems = [
   {
     "id" : 1,
