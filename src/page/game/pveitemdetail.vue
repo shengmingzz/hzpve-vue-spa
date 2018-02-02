@@ -7,10 +7,22 @@
         <pre class="infodesc">{{item.attributes}}</pre>
       </div>
     </div>
-    <sec-header tip="附带技能"></sec-header>
-    <pre class="desc">{{item.addition_skill_desc}}</pre>
-    <sec-header tip="合成公式"></sec-header>
+    <!-- 附带技能 -->
+    <sec-header v-if="subItem.addition_skill_desc" tip="附带技能"></sec-header>
+    <pre v-if="subItem.addition_skill_desc" class="desc">{{item.addition_skill_desc}}</pre>
+    <!-- 可合成 -->
+    <div v-if="parentsItem.length">
+      <sec-header tip="可合成"></sec-header>
+      <div class="container">
+        <a v-for="(item,key) in parentsItem" :key="key" class="cell-main" @click="clickItem(item.code)">
+          <img :src="item.icon" class="cell-img">
+          <div class="cell-text">{{item.name}}</div>
+        </a>
+      </div>
+    </div>
+
     <!-- equip 最多显示4层合成 -->
+    <sec-header v-if="subItem.subs" tip="合成公式"></sec-header>
     <!-- first -->
     <div v-if="subItem.subs" class="first" style="margin-top:1.5rem;width:100%;">
       <img :src="subItem.icon" class="itemicon">
@@ -23,7 +35,7 @@
         <div v-for="(sec,key1) in subItem.subs" :key="key1" style="flex:1;">
           <div style="display:flex;flex-direction:column;">
             <div style="width:.05rem;height:.6rem;background-color:#666;align-self:center;margin-bottom:.2rem;"></div>
-            <img :src="sec.icon" class="itemicon2">
+            <img :src="sec.icon" class="itemicon2" @click="clickItem(sec.code)">
             <div class="itemdesc2">{{sec.name}}</div>
             <div class="itemprice">{{sec.price}}</div>
             <div v-if="sec.subs" style="width:.05rem;height:.6rem;background-color:#666;align-self:center;"></div>
@@ -33,7 +45,7 @@
               <div v-for="(thr,key2) in sec.subs" :key="key2" style="flex:1;">
                 <div style="display:flex;flex-direction:column;">
                   <div style="width:.05rem;height:.6rem;background-color:#666;align-self:center;margin-bottom:.2rem;"></div>
-                  <img :src="thr.icon" class="itemicon3" style="">
+                  <img :src="thr.icon" class="itemicon3" @click="clickItem(thr.code)">
                   <div class="itemdesc3" >{{thr.name}}</div>
                   <div class="itemprice" style="font-size:.5rem;">{{thr.price}}</div>
                   <div v-if="thr.subs" style="width:.05rem;height:.6rem;background-color:#666;align-self:center;"></div>
@@ -43,7 +55,7 @@
                     <div v-for="(four,key2) in thr.subs" :key="key2" style="flex:1;">
                       <div style="display:flex;flex-direction:column;">
                         <div style="width:.05rem;height:.6rem;background-color:#666;align-self:center;margin-bottom:.2rem;"></div>
-                        <img :src="four.icon" class="itemicon4">
+                        <img :src="four.icon" class="itemicon4" @click="clickItem(four.code)">
                         <div class="itemdesc4" >{{four.name}}</div>
                         <div class="itemprice" style="font-size:.45rem;">{{four.price}}</div>
                         <div v-if="four.subs" style="width:.05rem;height:.6rem;background-color:#666;align-self:center;"></div>
@@ -60,12 +72,12 @@
       </div>
     </div>
     <!-- end equip -->
-    <div style="margin-bottom:18rem;"></div>
+    <div style="margin-bottom:2rem;"></div>
   </div>
 </template>
 
 <script>
-import {getPvpItem, getItemSubEquip} from '../data/pvpitem'
+import {getPvpItem, getItemSubEquip, getParentItems} from '../data/pvpitem'
 import secHeader from '@/components/secHeader'
 export default {
   data () {
@@ -79,7 +91,8 @@ export default {
   components: {secHeader},
   computed: {},
   created () {
-    this.code = this.$route.query.code
+    // this.code = this.$route.query.code
+    this.code = this.$route.params.id
   },
   mounted () {
     this.loadData()
@@ -88,6 +101,7 @@ export default {
     loadData () {
       this.item = getPvpItem(this.code)
       this.subItem = getItemSubEquip(this.item)
+      this.parentsItem = getParentItems(this.code)
     },
     widthPer (subnum) {
       if (subnum <= 1) {
@@ -98,6 +112,17 @@ export default {
       let data = {width: 100 * (subnum - 1) / subnum + '%;'}
       console.log(JSON.stringify(data))
       return data
+    },
+    clickItem (code) {
+      // this.$router.push({path: '/itemdetail', query: {'code': code}})
+      this.$router.push({path: '/pvpitem/' + code})
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      // 对路由变化作出响应...
+      this.code = this.$route.params.id
+      this.loadData()
     }
   }
 }
@@ -209,5 +234,35 @@ export default {
   font-size: .6rem;
   color: #c88c46;
   text-align: center;
+}
+
+.container {
+    justify-content: 'space-around';
+    align-items: 'flex-start';
+    background-color: #eee;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+    margin: .5rem .5rem .1rem .5rem;
+  }
+.cell-main {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cell-img {
+  display: block;
+  height: 2.8rem;
+  width: 2.8rem;
+  border-radius: .3rem;
+}
+.cell-text {
+  font-size: 0.5rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+  color: #666;
 }
 </style>

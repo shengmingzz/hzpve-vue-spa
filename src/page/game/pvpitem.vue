@@ -80,12 +80,7 @@ export default {
       this.detectItems = getItemDetect()
     },
     clickItem (item) {
-      var agent = navigator.userAgent
-      if (agent.indexOf('hehbox') >= 0) {
-        window.location.href = 'hzbox://com.nd.he.box/pvehero?code=' + item.code
-      } else {
-        this.$router.push({path: '/itemdetail', query: {'code': item.code}})
-      }
+      this.$router.push({path: '/pvpitem/' + item.code})
     }
   }
 }

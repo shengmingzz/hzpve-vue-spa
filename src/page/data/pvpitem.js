@@ -28,7 +28,7 @@ export function getItemDetect () {
   return getItemByType(5)
 }
 
-export function getItemByType(type) {
+export function getItemByType (type) {
   var array = []
   for (var i = 0; i < pvpitems.length; i++) {
     var item = pvpitems[i]
@@ -38,7 +38,7 @@ export function getItemByType(type) {
   }
   return  array
 }
-export function getItemSubEquip(item) {
+export function getItemSubEquip (item) {
   if (item.synthetic_formula) {
     var subitems = item.synthetic_formula
     var subs = subitems.split(',')
@@ -52,6 +52,18 @@ export function getItemSubEquip(item) {
   } else {
     return item
   }
+}
+export function getParentItems (code) {
+  var array = []
+  for (var i = 0; i < pvpitems.length; i++) {
+    var item = pvpitems[i]
+    if (item.synthetic_formula) {
+      if (item.synthetic_formula.indexOf(code + '') >= 0) {
+        array.push(item)
+      }
+    }
+  }
+  return  array
 }
 export var pvpitems = [
   {

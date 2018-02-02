@@ -85,7 +85,8 @@ const routes = [
       // pvp
       {path: '/pvphero', component: pvphero, meta: { keepAlive: true, title: 'pvp英雄' }}, // pvphero
       {path: '/pvpitem', component: pvpitem, meta: { keepAlive: true, title: 'pvp物品' }}, // pvpitem
-      {path: '/itemdetail', component: itemdetail, meta: { title: '物品详情' }} // itemdetail
+      // {path: '/itemdetail', component: itemdetail, meta: { title: '物品详情' }} // itemdetail
+      { path: '/pvpitem/:id', component: itemdetail }
     ]
   }
 ]
