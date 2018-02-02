@@ -17,37 +17,37 @@
       <div class="itemdesc">{{subItem.name}}</div>
       <div class="itemprice">{{subItem.price}}</div>
       <div v-if="subItem.subs" style="width:.05rem;height:.6rem;background-color:#666;align-self:center;"></div>
-      <div style="height:.05rem;background-color:#666;" :style="subItem.subs.length > 1 ? 'width:' + 100.0*(subItem.subs.length-1)/(subItem.subs.length) + '%;': 'width:0rem;'"></div>
+      <div style="height:.05rem;background-color:#666;align-self:center;" :style="subItem.subs.length > 1 ? 'width:' + 100.0*(subItem.subs.length-1)/(subItem.subs.length) + '%;': 'width:0rem;height:0rem;'"></div>
       <!-- second -->
-      <div v-if="subItem.subs" style="display:flex;flex-direction:row;margin-left:0.2rem;margin-right:0.2rem;width:100%">
+      <div v-if="subItem.subs" style="display:flex;flex-direction:row;width:100%">
         <div v-for="(sec,key1) in subItem.subs" :key="key1" style="flex:1;">
           <div style="display:flex;flex-direction:column;">
             <div style="width:.05rem;height:.6rem;background-color:#666;align-self:center;margin-bottom:.2rem;"></div>
-            <img :src="sec.icon" class="itemicon">
-            <div class="itemdesc">{{sec.name}}</div>
-            <div class="itemprice">{{subItem.price}}</div>
+            <img :src="sec.icon" class="itemicon2">
+            <div class="itemdesc2">{{sec.name}}</div>
+            <div class="itemprice">{{sec.price}}</div>
             <div v-if="sec.subs" style="width:.05rem;height:.6rem;background-color:#666;align-self:center;"></div>
-            <div v-if="sec.subs" style="height:.05rem;background-color:#666;align-self:center;" :style="sec.subs.length > 1 ? 'width:' + 100.0*(sec.subs.length-1)/(sec.subs.length) + '%;': 'width:0rem;'"></div>
+            <div v-if="sec.subs" style="height:.05rem;background-color:#666;align-self:center;" :style="sec.subs.length > 1 ? 'width:' + 100.0*(sec.subs.length-1)/(sec.subs.length) + '%;': 'width:0rem;height:0rem;'"></div>
             <!-- thrid -->
-            <div v-if="sec.subs" style="display:flex;flex-direction:row;margin-left:0.2rem;margin-right:0.2rem;">
+            <div v-if="sec.subs" style="display:flex;flex-direction:row;">
               <div v-for="(thr,key2) in sec.subs" :key="key2" style="flex:1;">
                 <div style="display:flex;flex-direction:column;">
                   <div style="width:.05rem;height:.6rem;background-color:#666;align-self:center;margin-bottom:.2rem;"></div>
-                  <img :src="thr.icon" class="itemicon" style="width:2.5rem;height:2.5rem;">
-                  <div class="itemdesc" style="font-size:.5rem;">{{thr.name}}</div>
+                  <img :src="thr.icon" class="itemicon3" style="">
+                  <div class="itemdesc3" >{{thr.name}}</div>
                   <div class="itemprice" style="font-size:.5rem;">{{thr.price}}</div>
                   <div v-if="thr.subs" style="width:.05rem;height:.6rem;background-color:#666;align-self:center;"></div>
-                  <!-- <div style="height:.05rem;background-color:#666;" :style="thr.subs.length > 1 ? 'width:' + 100.0*(thr.subs.length-1)/(thr.subs.length) + '%;': 'width:0rem;'"></div> -->
+                  <div v-if="thr.subs" style="height:.05rem;background-color:#666;align-self:center;" :style="thr.subs.length > 1 ? 'width:' + 100.0*(thr.subs.length-1)/(thr.subs.length) + '%;': 'width:0rem;height:0rem;'"></div>
                   <!-- four -->
-                  <div v-if="thr.subs" style="display:flex;flex-direction:row;margin-left:0.2rem;margin-right:0.2rem;">
+                  <div v-if="thr.subs" style="display:flex;flex-direction:row;">
                     <div v-for="(four,key2) in thr.subs" :key="key2" style="flex:1;">
                       <div style="display:flex;flex-direction:column;">
                         <div style="width:.05rem;height:.6rem;background-color:#666;align-self:center;margin-bottom:.2rem;"></div>
-                        <img :src="four.icon" class="itemicon" style="width:2.3rem;height:2.3rem;">
-                        <div class="itemdesc" style="font-size:.45rem;">{{four.name}}</div>
+                        <img :src="four.icon" class="itemicon4">
+                        <div class="itemdesc4" >{{four.name}}</div>
                         <div class="itemprice" style="font-size:.45rem;">{{four.price}}</div>
                         <div v-if="four.subs" style="width:.05rem;height:.6rem;background-color:#666;align-self:center;"></div>
-                        <!-- <div style="height:.05rem;background-color:#666;" :style="four.subs.length > 1 ? 'width:' + 100.0*(four.subs.length-1)/(four.subs.length) + '%;': 'width:0rem;'"></div> -->
+                        <div v-if="four.subs" style="height:.05rem;background-color:#666;align-self:center;" :style="four.subs.length > 1 ? 'width:' + 100.0*(four.subs.length-1)/(four.subs.length) + '%;': 'width:0rem;height:0rem;'"></div>
                       </div>
                     </div>
                   </div>
@@ -60,6 +60,7 @@
       </div>
     </div>
     <!-- end equip -->
+    <div style="margin-bottom:18rem;"></div>
   </div>
 </template>
 
@@ -161,13 +162,46 @@ export default {
   flex: 1
 }
 .itemicon {
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 2.5rem;
+  height: 2.5rem;
   align-self: center;
   border-radius: .3rem;
 }
 .itemdesc {
   font-size: .6rem;
+  color: #666;
+  text-align: center;
+}
+.itemicon2 {
+  width: 2.2rem;
+  height: 2.2rem;
+  align-self: center;
+  border-radius: .27rem;
+}
+.itemdesc2 {
+  font-size: .6rem;
+  color: #666;
+  text-align: center;
+}
+.itemicon3 {
+  width: 1.8rem;
+  height: 1.8rem;
+  align-self: center;
+  border-radius: .24rem;
+}
+.itemdesc3 {
+  font-size: .5rem;
+  color: #666;
+  text-align: center;
+}
+.itemicon4 {
+  width: 1.3rem;
+  height: 1.3rem;
+  align-self: center;
+  border-radius: .2rem;
+}
+.itemdesc4 {
+  font-size: .3rem;
   color: #666;
   text-align: center;
 }
