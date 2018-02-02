@@ -39,8 +39,9 @@ const home = r => require.ensure([], () => r(require('@/page/home/home')), 'home
 
 // pvp local
 const pvphero = r => require.ensure([], () => r(require('@/page/game/pvphero')), 'pvphero')
+const pvpheroitem = r => require.ensure([], () => r(require('@/page/game/pvpheroitem')), 'pvpheroitem')
 const pvpitem = r => require.ensure([], () => r(require('@/page/game/pvpitem')), 'pvpitem')
-const itemdetail = r => require.ensure([], () => r(require('@/page/game/pveitemdetail')), 'itemdetail')
+const itemdetail = r => require.ensure([], () => r(require('@/page/game/pvpitemdetail')), 'itemdetail')
 
 const routes = [
   {
@@ -84,16 +85,16 @@ const routes = [
 
       // pvp
       {path: '/pvphero', component: pvphero, meta: { keepAlive: true, title: 'pvp英雄' }}, // pvphero
+      {path: '/pvphero/:id', component: pvpheroitem, meta: { title: 'pvp英雄详情' }},
       {path: '/pvpitem', component: pvpitem, meta: { keepAlive: true, title: 'pvp物品' }}, // pvpitem
-      // {path: '/itemdetail', component: itemdetail, meta: { title: '物品详情' }} // itemdetail
-      { path: '/pvpitem/:id', component: itemdetail }
+      {path: '/pvpitem/:id', component: itemdetail, meta: { title: 'pvp物品详情' }}
     ]
   }
 ]
 
 export default new Router({
   routes,
-  mode: 'history',
+  // mode: 'history',
   // base: '/static/pve/',
   strict: process.env.NODE_ENV !== 'production',
   scrollBehavior (to, from, savedPosition) {

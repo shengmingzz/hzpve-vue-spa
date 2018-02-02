@@ -38,31 +38,51 @@
       </div>
     </div>
 
-    <div class="menu">
-      <div class="menuitem" @click="clickMenu(0)" :style="menu==0?'color:#c88c46':'color:#999'">英雄技能</div>
-      <div class="menuitem" @click="clickMenu(1)" :style="menu==1?'color:#c88c46':'color:#999'">背景故事</div>
+    <!-- <div>
+       <tab :line-width=2 active-color='#fc378c' v-model="index">
+        <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
+      </tab>
+      <swiper v-model="index" height="100px" :show-dots="false">
+        <swiper-item v-for="(item, index) in list2" :key="index">
+          <div class="tab-swiper vux-center">{{item}} Container</div>
+        </swiper-item>
+      </swiper>
+    </div> -->
+
+    <div>
+       <tab :line-width=2 active-color='#fc378c' v-model="index">
+        <tab-item class="vux-center" :selected="index === 0" @click="index = 0" >英雄技能</tab-item>
+        <tab-item class="vux-center" :selected="index === 1" @click="index = 1" >背景故事</tab-item>
+      </tab>
+      <swiper v-model="index" :show-dots="false">
+        <swiper-item>
+          <div>
+            <div class="skill" v-for="(item,key) in skills" :key="key">
+              <img :src="item.icon" class="skillicon" :onerror="logo">
+              <div class="skillinfo">
+                <div class="skilltitle">{{item.name}}</div>
+                <div class="skilldesc"><span v-if="item.skill_CD">冷却: {{item.skill_CD}}秒</span><span v-if="item.expend_MP">  耗蓝: {{item.expend_MP}}</span><span v-if="item.distance">  射程: {{item.distance}}</span></div>
+                <div class="skilldesc">{{item.description}}</div>
+                <pre class="skillother">{{item.tip}}</pre>
+              </div>
+            </div>
+          </div>
+        </swiper-item>
+        <swiper-item>
+          <pre class="story">
+            {{hero.name}}
+          </pre>
+        </swiper-item>
+      </swiper>
     </div>
 
-    <div v-show="menu==0">
-      <div class="skill" v-for="(item,key) in skills" :key="key">
-        <img :src="item.icon" class="skillicon" :onerror="logo">
-        <div class="skillinfo">
-          <div class="skilltitle">{{item.name}}</div>
-          <div class="skilldesc">{{item.description1}}</div>
-          <pre class="skillother">{{item.description2}}</pre>
-        </div>
-      </div>
-    </div>
-
-    <pre class="story" v-show="menu==1">
-      {{hero.description}}
-    </pre>
   </div>
 </template>
 
 <script>
+import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import {getPvpHero} from '../data/pvphero'
-import {getHeroSkill} from '../data/heroskill'
+import {getHeroSkill} from '../data/pvpskill'
 
 export default {
   data () {
@@ -70,13 +90,13 @@ export default {
       logo: 'this.src="' + require('../../img/default.png') + '"',
       hero: {},
       skills: [],
-      menu: 0
+      index: 0
     }
   },
-  components: {},
+  components: {Tab, TabItem, Swiper, SwiperItem},
   computed: {},
   created () {
-    this.code = this.$route.query.code
+    this.code = this.$route.params.id
   },
   mounted () {
     this.loadData()
@@ -85,11 +105,8 @@ export default {
     loadData () {
       this.hero = getPvpHero(this.code)
       if (this.hero !== null) {
-        this.skills = getHeroSkill(this.hero.skills)
+        this.skills = getHeroSkill(this.hero)
       }
-    },
-    clickMenu (code) {
-      this.menu = code
     }
   }
 }
@@ -202,5 +219,9 @@ export default {
   font-size: 0.7rem;
   color: #333;
   line-height: 1.4rem;
+}
+.app {
+  display: flex;
+  flex-direction: column;
 }
 </style>

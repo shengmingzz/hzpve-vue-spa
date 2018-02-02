@@ -1,3 +1,38 @@
+export function getHeroSkill(hero) {
+  var skills = []
+  var q_item = null
+  var w_item = null
+  var e_item = null
+  var r_item = null
+  for (var i = 0; i < pvpskills.length; i++) {
+    var item = pvpskills[i]
+    if (parseInt(item.code) === parseInt(hero.q_skill)) {
+      q_item = item
+    }
+    if (parseInt(item.code) === parseInt(hero.w_skill)) {
+      w_item = item
+    }
+    if (parseInt(item.code) === parseInt(hero.e_skill)) {
+      e_item = item
+    }
+    if (parseInt(item.code) === parseInt(hero.r_skill)) {
+      r_item = item
+    }
+  }
+  if (q_item) {
+    skills.push(q_item)
+  }
+  if (w_item) {
+    skills.push(w_item)
+  }
+  if (e_item) {
+    skills.push(e_item)
+  }
+  if (r_item) {
+    skills.push(r_item)
+  }
+  return skills
+}
 export var pvpskills = [
   {
     "skill_CD" : "9",

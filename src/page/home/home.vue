@@ -20,7 +20,10 @@ export default {
         {'title': '混沌遗迹', 'icon': require('../../img/thumb_hdyj@2x.png')},
         {'title': '英魂祭坛', 'icon': require('../../img/thumb_yhjt@2x.png')},
         {'title': '冒险之旅', 'icon': require('../../img/thumb_mxzl@2x.png')},
-        {'title': '竞技场', 'icon': require('../../img/thumb_jjc@2x.png')}
+        {'title': '竞技场', 'icon': require('../../img/thumb_jjc@2x.png')},
+
+        {'title': 'pvp-英雄', 'icon': require('../../img/raid_zzsl.jpg')},
+        {'title': 'pvp-物品', 'icon': require('../../img/thumb_yhjt@2x.png')}
       ]
     }
   },
@@ -33,7 +36,7 @@ export default {
     loadData () {
     },
     clickModule (index) {
-      if (index === 0) {
+      if (index === 0) { // pve
         this.$router.push({path: '/yxtjlocal'})
       } else if (index === 1) {
         this.$router.push({path: '/xzsllocal'})
@@ -45,6 +48,10 @@ export default {
         this.$router.push({path: '/mxzllocal'})
       } else if (index === 5) {
         this.$router.push({path: '/jjclocal'})
+      } else if (index === 6) { // pvp
+        this.$router.push({path: '/pvphero'})
+      } else if (index === 7) {
+        this.$router.push({path: '/pvpitem'})
       }
     }
   }
