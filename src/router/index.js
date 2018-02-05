@@ -43,6 +43,9 @@ const pvpheroitem = r => require.ensure([], () => r(require('@/page/game/pvphero
 const pvpitem = r => require.ensure([], () => r(require('@/page/game/pvpitem')), 'pvpitem')
 const itemdetail = r => require.ensure([], () => r(require('@/page/game/pvpitemdetail')), 'itemdetail')
 
+// info
+const infomain = r => require.ensure([], () => r(require('@/page/info/infomain')), 'infomain')
+
 const routes = [
   {
     path: '/',
@@ -87,7 +90,10 @@ const routes = [
       {path: '/pvphero', component: pvphero, meta: { keepAlive: true, title: 'pvp英雄' }}, // pvphero
       {path: '/pvphero/:id', component: pvpheroitem, meta: { title: 'pvp英雄详情' }},
       {path: '/pvpitem', component: pvpitem, meta: { keepAlive: true, title: 'pvp物品' }}, // pvpitem
-      {path: '/pvpitem/:id', component: itemdetail, meta: { title: 'pvp物品详情' }}
+      {path: '/pvpitem/:id', component: itemdetail, meta: { title: 'pvp物品详情' }},
+
+      // info
+      {path: '/infomain', component: infomain, meta: { title: '资讯' }}
     ]
   }
 ]

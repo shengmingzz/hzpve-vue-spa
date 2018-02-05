@@ -7,10 +7,6 @@ import router from './router'
 import store from './store'
 import './config/rem'
 import FastClick from 'fastclick'
-// import Mint from 'mint-ui'
-// import 'mint-ui/lib/style.css'
-//
-// Vue.use(Mint)
 
 Vue.config.productionTip = false
 

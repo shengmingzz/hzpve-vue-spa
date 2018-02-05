@@ -65,6 +65,19 @@ export function getParentItems (code) {
   }
   return  array
 }
+export function getHeroEquip (equipstr) {
+  if (!equipstr) {
+    return []
+  }
+  var array = []
+  for (var i = 0; i < pvpitems.length; i++) {
+    var item = pvpitems[i]
+    if (equipstr.indexOf(item.code) >= 0) {
+      array.push(item)
+    }
+  }
+  return  array
+}
 export var pvpitems = [
   {
     "id" : 1,

@@ -1,10 +1,7 @@
 <template>
   <div
     @touchstart="startDrag"
-    @mousedown="startDrag"
     @touchmove="onDrag"
-    @mousemove="onDrag"
-    @mouseup="endDrag"
     @touchend="endDrag"
     class="mint-tab-container">
     <div

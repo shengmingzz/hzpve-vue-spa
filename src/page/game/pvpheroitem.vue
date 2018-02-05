@@ -3,82 +3,35 @@
     <div class="head" v-if="hero != null">
       <img class="icon" :src="hero.icon" :onerror="logo">
       <div class="info">
-        <div class="star">
-          <div style="margin-right:.4rem;">{{hero.name}}</div>
-          <img v-for="(ind) in hero.star_num" :key="ind" src="../../img/hero_star@2x.png" style="width:0.8rem;height:0.8rem;margin-right:0.2rem;">
+        <div class="name">{{hero.name}}</div>
+        <div class="name" style="font-size:.6rem;">{{hero.position}}</div>
+
+        <div class="progress">
+          <div class="bot">物理:</div>
+          <progress-bar class="progressbar" topColor="#ff5b62" backColor="#d0d0d0" :percent="hero.physical*10 + '%'"></progress-bar>
         </div>
-        <div class="data">
-          <div class="item">
-            <div class="top">{{hero.attack}}</div>
-            <div class="bot">攻击</div>
-          </div>
-          <div class="item">
-            <div class="top">{{hero.spll_power}}</div>
-            <div class="bot">法强</div>
-          </div>
-          <div class="item">
-            <div class="top">{{hero.life}}</div>
-            <div class="bot">生命</div>
-          </div>
+        <div class="progress">
+          <span class="bot">法术:</span>
+          <progress-bar class="progressbar" topColor="#7397fd" backColor="#d0d0d0" :percent="hero.magic*10 + '%'"></progress-bar>
         </div>
-        <div class="data">
-          <div class="item">
-            <div class="top">{{hero.mana}}</div>
-            <div class="bot">法力</div>
-          </div>
-          <div class="item">
-            <div class="top">{{hero.defense}}</div>
-            <div class="bot">护甲</div>
-          </div>
-          <div class="item">
-            <div class="top">{{hero.spellresist}}</div>
-            <div class="bot">魔抗</div>
-          </div>
+        <div class="progress">
+          <span class="bot">生存:</span>
+          <progress-bar class="progressbar" topColor="#5ad473" backColor="#d0d0d0" :percent="hero.existence*10 + '%'"></progress-bar>
+        </div>
+        <div class="progress">
+          <span class="bot">难度:</span>
+          <progress-bar class="progressbar" topColor="#ffbb5b" backColor="#d0d0d0" :percent="hero.difficult*10 + '%'"></progress-bar>
         </div>
       </div>
     </div>
 
-    <!-- <div>
-       <tab :line-width=2 active-color='#fc378c' v-model="index">
-        <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
+    <div class="page-tab-container">
+      <tab :line-width=2 active-color='#e77e11' v-model="currentIndex" >
+        <tab-item class="vux-center" :selected="containerId === 'a'" @on-item-click="clickTab('a')" >英雄技能</tab-item>
+        <tab-item class="vux-center" :selected="containerId === 'b'" @on-item-click="clickTab('b')" >推荐出装</tab-item>
       </tab>
-      <swiper v-model="index" height="100px" :show-dots="false">
-        <swiper-item v-for="(item, index) in list2" :key="index">
-          <div class="tab-swiper vux-center">{{item}} Container</div>
-        </swiper-item>
-      </swiper>
-    </div> -->
-
-    <div>
-       <tab :line-width=2 active-color='#fc378c' v-model="index">
-        <tab-item class="vux-center" :selected="active === 'tab-container1'" @click="active = 'tab-container1'" >英雄技能</tab-item>
-        <tab-item class="vux-center" :selected="active === 'tab-container2'" @click="active = 'tab-container2'" >背景故事</tab-item>
-      </tab>
-      <div class="page-tab-container">
-        <wj-tab-container class="page-tabbar-tab-container" v-model="active" swipeable>
-          <wj-tab-container-item id="tab-container1">
-            <div>
-              <div class="skill" v-for="(item,key) in skills" :key="key">
-                <img :src="item.icon" class="skillicon" :onerror="logo">
-                <div class="skillinfo">
-                  <div class="skilltitle">{{item.name}}</div>
-                  <div class="skilldesc"><span v-if="item.skill_CD">冷却: {{item.skill_CD}}秒</span><span v-if="item.expend_MP">  耗蓝: {{item.expend_MP}}</span><span v-if="item.distance">  射程: {{item.distance}}</span></div>
-                  <div class="skilldesc">{{item.description}}</div>
-                  <pre class="skillother">{{item.tip}}</pre>
-                </div>
-              </div>
-            </div>
-          </wj-tab-container-item>
-          <wj-tab-container-item id="tab-container2">
-            <pre class="story">
-              {{hero.name}}
-            </pre>
-          </wj-tab-container-item>
-        </wj-tab-container>
-      </div>
-
-      <!-- <swiper v-model="index" :show-dots="false">
-        <swiper-item>
+      <wj-tab-container class="page-tabbar-tab-container" v-model="containerId" swipeable>
+        <wj-tab-container-item id="a">
           <div>
             <div class="skill" v-for="(item,key) in skills" :key="key">
               <img :src="item.icon" class="skillicon" :onerror="logo">
@@ -90,24 +43,53 @@
               </div>
             </div>
           </div>
-        </swiper-item>
-        <swiper-item>
-          <pre class="story">
-            {{hero.name}}
-          </pre>
-        </swiper-item>
-      </swiper> -->
-    </div>
+        </wj-tab-container-item>
+        <wj-tab-container-item id="b">
+          <div v-if="equipt1.length">
+            <sec-header v-if="equipt1.length" :tip="'推荐出装: ' + hero.equip_tip1"></sec-header>
+            <div class="container">
+              <a v-for="(item,key) in equipt1" :key="key" class="cell-main" @click="clickItem(item.code)">
+                <img :src="item.icon" class="cell-img">
+                <div class="cell-text">{{item.name}}</div>
+              </a>
+            </div>
+          </div>
 
+          <div v-if="equipt2.length">
+            <sec-header v-if="equipt2.length" :tip="'推荐出装: ' + hero.equip_tip2"></sec-header>
+            <div class="container">
+              <a v-for="(item,key) in equipt2" :key="key" class="cell-main" @click="clickItem(item.code)">
+                <img :src="item.icon" class="cell-img">
+                <div class="cell-text">{{item.name}}</div>
+              </a>
+            </div>
+          </div>
+
+          <div v-if="equipt3.length">
+            <sec-header v-if="equipt3.length" :tip="'推荐出装: ' + hero.equip_tip3"></sec-header>
+            <div class="container">
+              <a v-for="(item,key) in equipt3" :key="key" class="cell-main" @click="clickItem(item.code)">
+                <img :src="item.icon" class="cell-img">
+                <div class="cell-text">{{item.name}}</div>
+              </a>
+            </div>
+          </div>
+        </wj-tab-container-item>
+
+      </wj-tab-container>
+    </div>
   </div>
 </template>
 
 <script>
 import wjTabContainer from '../../components/tab-container/tab-container'
 import wjTabContainerItem from '../../components/tab-container/tab-container-item'
-import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import { Tab, TabItem } from 'vux'
+import secHeader from '@/components/secHeader'
+import progressBar from '@/components/progress'
 import {getPvpHero} from '../data/pvphero'
 import {getHeroSkill} from '../data/pvpskill'
+import {getHeroEquip} from '../data/pvpitem'
 
 export default {
   data () {
@@ -116,10 +98,15 @@ export default {
       hero: {},
       skills: [],
       index: 0,
-      active: 'tab-container1'
+      active: 0,
+      currentIndex: 0,
+      containerId: 'a',
+      equipt1: [],
+      equipt2: [],
+      equipt3: []
     }
   },
-  components: {Tab, TabItem, Swiper, SwiperItem, wjTabContainer, wjTabContainerItem},
+  components: {Tab, TabItem, wjTabContainer, wjTabContainerItem, secHeader, progressBar},
   computed: {},
   created () {
     this.code = this.$route.params.id
@@ -132,8 +119,31 @@ export default {
       this.hero = getPvpHero(this.code)
       if (this.hero !== null) {
         this.skills = getHeroSkill(this.hero)
+        this.equipt1 = getHeroEquip(this.hero.equip1)
+        this.equipt2 = getHeroEquip(this.hero.equip2)
+        this.equipt3 = getHeroEquip(this.hero.equip3)
       }
+    },
+    clickTab (data) {
+      this.containerId = data
+      if (data === 'a') {
+        this.currentIndex = 0
+      } else {
+        this.currentIndex = 1
+      }
+    },
+    clickItem (code) {
+      this.$router.push({path: '/pvpitem/' + code})
     }
+  },
+  watch: {
+    // containerId: function setCurrent (value) {
+    //   if (value === 'a') {
+    //     this.currentIndex = 0
+    //   } else if (value === 'b') {
+    //     this.currentIndex = 1
+    //   }
+    // }
   }
 }
 </script>
@@ -152,26 +162,25 @@ export default {
 .info {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  /*justify-content: space-around;*/
   margin-left: .6rem;
 }
-.star {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+.name {
   margin-top: 0rem;
-  /*margin-bottom: .6rem;*/
-  /*margin-left: .6rem;*/
-  /*margin-right: .6rem;*/
   font-size: .7rem;
   color: #333;
 }
-.data {
+.progress {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: .15rem;
+}
+.progressbar {
+  height:.6rem;width:8rem;
   align-items: center;
+  display: flex;
 }
 .item {
   display: flex;
@@ -186,6 +195,7 @@ export default {
 .bot {
   font-size: .6rem;
   color: #666;
+  margin-right: .3rem;
 }
 .menu {
   display: flex;
@@ -249,5 +259,34 @@ export default {
 .app {
   display: flex;
   flex-direction: column;
+}
+.container {
+    justify-content: 'space-around';
+    align-items: 'flex-start';
+    background-color: #eee;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+    margin: .5rem .5rem .1rem .5rem;
+  }
+.cell-main {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cell-img {
+  display: block;
+  height: 2.8rem;
+  width: 2.8rem;
+  border-radius: .3rem;
+}
+.cell-text {
+  font-size: 0.5rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+  color: #666;
 }
 </style>
