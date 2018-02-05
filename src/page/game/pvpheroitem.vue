@@ -51,10 +51,33 @@
 
     <div>
        <tab :line-width=2 active-color='#fc378c' v-model="index">
-        <tab-item class="vux-center" :selected="index === 0" @click="index = 0" >英雄技能</tab-item>
-        <tab-item class="vux-center" :selected="index === 1" @click="index = 1" >背景故事</tab-item>
+        <tab-item class="vux-center" :selected="active === 'tab-container1'" @click="active = 'tab-container1'" >英雄技能</tab-item>
+        <tab-item class="vux-center" :selected="active === 'tab-container2'" @click="active = 'tab-container2'" >背景故事</tab-item>
       </tab>
-      <swiper v-model="index" :show-dots="false">
+      <div class="page-tab-container">
+        <wj-tab-container class="page-tabbar-tab-container" v-model="active" swipeable>
+          <wj-tab-container-item id="tab-container1">
+            <div>
+              <div class="skill" v-for="(item,key) in skills" :key="key">
+                <img :src="item.icon" class="skillicon" :onerror="logo">
+                <div class="skillinfo">
+                  <div class="skilltitle">{{item.name}}</div>
+                  <div class="skilldesc"><span v-if="item.skill_CD">冷却: {{item.skill_CD}}秒</span><span v-if="item.expend_MP">  耗蓝: {{item.expend_MP}}</span><span v-if="item.distance">  射程: {{item.distance}}</span></div>
+                  <div class="skilldesc">{{item.description}}</div>
+                  <pre class="skillother">{{item.tip}}</pre>
+                </div>
+              </div>
+            </div>
+          </wj-tab-container-item>
+          <wj-tab-container-item id="tab-container2">
+            <pre class="story">
+              {{hero.name}}
+            </pre>
+          </wj-tab-container-item>
+        </wj-tab-container>
+      </div>
+
+      <!-- <swiper v-model="index" :show-dots="false">
         <swiper-item>
           <div>
             <div class="skill" v-for="(item,key) in skills" :key="key">
@@ -73,13 +96,15 @@
             {{hero.name}}
           </pre>
         </swiper-item>
-      </swiper>
+      </swiper> -->
     </div>
 
   </div>
 </template>
 
 <script>
+import wjTabContainer from '../../components/tab-container/tab-container'
+import wjTabContainerItem from '../../components/tab-container/tab-container-item'
 import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import {getPvpHero} from '../data/pvphero'
 import {getHeroSkill} from '../data/pvpskill'
@@ -90,10 +115,11 @@ export default {
       logo: 'this.src="' + require('../../img/default.png') + '"',
       hero: {},
       skills: [],
-      index: 0
+      index: 0,
+      active: 'tab-container1'
     }
   },
-  components: {Tab, TabItem, Swiper, SwiperItem},
+  components: {Tab, TabItem, Swiper, SwiperItem, wjTabContainer, wjTabContainerItem},
   computed: {},
   created () {
     this.code = this.$route.params.id
