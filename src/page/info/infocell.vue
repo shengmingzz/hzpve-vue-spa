@@ -31,23 +31,34 @@
 </template>
 
 <script>
-  import infoItem from './infoItem'
-  export default {
-    data () {
-      return {
-        logo: 'this.src="' + require('../../img/default.png') + '"'
+import infoItem from './infoItem'
+var _ = require('lodash-node')
+export default {
+  data () {
+    return {
+      logo: 'this.src="' + require('../../img/default.png') + '"'
+    }
+  },
+  props: ['item'],
+  components: {
+    infoItem
+  },
+  methods: {
+    cellType () {
+      var data = this.item.imageInContent
+      if (_.isArray(data) && data.length > 0) {
+        if (data.length >= 3) {
+          return 3
+        }
+        return 1
       }
-    },
-    props: ['item'],
-    components: {
-      infoItem
-    },
-    methods: {
-      cellType () {
-        return 3
+      if (this.item.thumbnail4Rec) {
+        return 1
       }
+      return 0
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

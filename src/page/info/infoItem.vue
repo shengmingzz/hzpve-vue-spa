@@ -1,8 +1,8 @@
 <template>
   <div class="down">
     <div class="left">
-      <img :src="hotIcon" class="hot" v-show="!item.ishot" :style="hotStyle()"></img>
-      <img :src="topIcon" class="top" v-show="item.istop" :style="topStyle()"></img>
+      <img :src="hotIcon" class="hot" v-show="item.isAwesome" :style="hotStyle()">
+      <img :src="topIcon" class="top" v-show="item.isFixedAtTop" :style="topStyle()">
       <h5 :style="authorStyle()">{{item.writer ? item.writer.name : ""}}</h5>
       <h5 style="margin-left:.6rem;">{{item.commentCount}}评论</h5>
     </div>
@@ -13,26 +13,26 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        topIcon: require('../../img/news_top@2x.png'),
-        hotIcon: require('../../img/news_hot@2x.png')
-      }
+export default {
+  data () {
+    return {
+      topIcon: require('../../img/info/news_top@2x.png'),
+      hotIcon: require('../../img/info/news_hot@2x.png')
+    }
+  },
+  props: ['item'],
+  methods: {
+    hotStyle () {
+      return this.item.isAwesome ? 'margin-left:0rem;width:.7rem;height:.7rem;' : 'width:0rem;height:0rem;'
     },
-    props: ['item'],
-    methods: {
-      hotStyle () {
-        return this.item.ishot ? 'margin-left:0rem;width:.7rem;height:.7rem;' : 'width:0rem;height:0rem;'
-      },
-      topStyle () {
-        return this.item.istop ? (this.item.ishot ? 'margin-let:0.4rem;width:1.4rem;height:0.7rem;' : 'margin-let:0rem;width:0rem;height:0rem;') : 'margin-let:0rem;width:0rem;height:0rem;'
-      },
-      authorStyle () {
-        return (!this.item.istop && !this.item.ishot) ? 'margin-left:0rem;' : 'margin-left:0.6rem;'
-      }
+    topStyle () {
+      return this.item.isFixedAtTop ? (this.item.isAwesome ? 'margin-let:0.4rem;width:1.4rem;height:0.7rem;' : 'margin-let:0rem;width:0rem;height:0rem;') : 'margin-let:0rem;width:0rem;height:0rem;'
+    },
+    authorStyle () {
+      return (!this.item.isFixedAtTop && !this.item.isAwesome) ? 'margin-left:0rem;' : 'margin-left:0.6rem;'
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

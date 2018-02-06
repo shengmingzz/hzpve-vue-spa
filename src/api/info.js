@@ -12,12 +12,7 @@ export function getNews (offset, limit, type) {
   let params = {
     query: query
   }
-  return fetch({
-    url: serverUrl,
-    method: 'post',
-    params
-  })
-  // return devbaseReq(params)
+  return devbaseReq(params)
 }
 export function getNewsDetail (newsId) {
   let query = 'normalNewsDetail(newsId:' + '"' + newsId + '")'
@@ -52,7 +47,7 @@ export function baseReq (params) {
   })
 }
 // 通过中间服务器进行请求api，跨域问题
-export function devbaseReq (method, params) {
+export function devbaseReq (params) {
   const data = {
     url: serverUrl,
     method: 'post',

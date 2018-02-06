@@ -26,10 +26,12 @@
     </div>
 
     <div class="page-tab-container">
-      <tab :line-width=2 active-color='#e77e11' v-model="currentIndex" >
+      <!-- <tab :line-width=2 active-color='#e77e11' v-model="currentIndex" >
         <tab-item class="vux-center" :selected="containerId === 'a'" @on-item-click="clickTab('a')" >英雄技能</tab-item>
         <tab-item class="vux-center" :selected="containerId === 'b'" @on-item-click="clickTab('b')" >推荐出装</tab-item>
-      </tab>
+      </tab> -->
+      <wj-tabbar :titles="titles" :ids="ids" v-model="containerId">
+      </wj-tabbar>
       <wj-tab-container class="page-tabbar-tab-container" v-model="containerId" swipeable>
         <wj-tab-container-item id="a">
           <div>
@@ -84,12 +86,13 @@
 <script>
 import wjTabContainer from '../../components/tab-container/tab-container'
 import wjTabContainerItem from '../../components/tab-container/tab-container-item'
-import { Tab, TabItem } from 'vux'
+// import { Tab, TabItem } from 'vux'
 import secHeader from '@/components/secHeader'
 import progressBar from '@/components/progress'
 import {getPvpHero} from '../data/pvphero'
 import {getHeroSkill} from '../data/pvpskill'
 import {getHeroEquip} from '../data/pvpitem'
+import wjTabbar from '../../components/tab-bar/tab-bar'
 
 export default {
   data () {
@@ -103,10 +106,12 @@ export default {
       containerId: 'a',
       equipt1: [],
       equipt2: [],
-      equipt3: []
+      equipt3: [],
+      titles: ['英雄技能', '推荐出装'],
+      ids: ['a', 'b']
     }
   },
-  components: {Tab, TabItem, wjTabContainer, wjTabContainerItem, secHeader, progressBar},
+  components: {wjTabContainer, wjTabContainerItem, secHeader, progressBar, wjTabbar},
   computed: {},
   created () {
     this.code = this.$route.params.id
