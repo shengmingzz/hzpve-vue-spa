@@ -5,12 +5,16 @@
         <div class="line"></div>
         <div class="tip">试炼说明</div>
     </div>
-    <div class="desc">需要多人协作才能挑战星座守护者;每日凌晨2点可以重新获得2次挑战机会;挑战时，所有英雄修改为30级属性!</div>
-    <div class="section">
+    <div class="desc" style="margin-top:.6rem;">需要多人协作才能挑战星座守护者</div>
+    <div class="desc">每日凌晨2点可以重新获得2次挑战机会</div>
+    <div class="desc">挑战时，所有英雄修改为30级属性!</div>
+    <div class="desc">周六周日挑战,水晶奖励翻倍!</div>
+    <!-- <div class="desc">需要多人协作才能挑战星座守护者;每日凌晨2点可以重新获得2次挑战机会;挑战时，所有英雄修改为30级属性!周六周日挑战,水晶奖励翻倍!</div> -->
+    <!-- <div class="section">
         <div class="line"></div>
         <div class="tip">开放时间</div>
     </div>
-    <div class="desc">17:30 - 24:00</div>
+    <div class="desc">17:30 - 24:00</div> -->
     <div class="section">
         <div class="line"></div>
         <div class="tip">混沌奖励</div>
@@ -92,7 +96,7 @@ export default {
 .desc {
   font-size: 0.7rem;
   color: #333;
-  margin-top: 0.6rem;
+  /*margin-top: 0.6rem;*/
   margin-left: 0.6rem;
   margin-right: 0.6rem;
 }

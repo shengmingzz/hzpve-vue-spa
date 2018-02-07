@@ -1,0 +1,14 @@
++ (void)getTvWithType:(NSString*)type
+                 page:(NSInteger)page
+               callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = @"https://mccos.99.com/live/data/getVideoList";
+
+    NSDictionary *params = @{@"page":@(page),@"platform":type};
+    [HBNetworkHelper EncodePOST:url parameters:params modelClass:HBTvItemListModel.class responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight-kTopHeight-kTabBarHeight) withTitles:@[@"全部", @"虎牙",@"触手",@"龙珠",@"斗鱼"] withViewControllers:@[recommend,huya, chushou, longzhu, douyu] withParameters:nil];

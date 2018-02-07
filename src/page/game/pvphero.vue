@@ -1,36 +1,41 @@
 <template>
-  <div id="app">
-    <div style="margin-top:1rem;"></div>
-    <div>
-      <sec-header tip="力量型"></sec-header>
-      <div class="container">
-        <a v-for="(item,key) in phyHero" :key="key" class="cell-main" @click="clickHeroItem(item)">
-          <img :src="item.icon" class="cell-img">
-          <div class="cell-text">{{item.name}}</div>
-        </a>
+  <div class="page">
+    <scroller :on-refresh="refresh" :on-infinite="infinite" ref="myscroller" refreshLayerColor="#0f0" loadingLayerColor="#0f0">
+    <!-- <section id="scroll_section" class="scroll_section"> -->
+      <div style="margin-top:1rem;"></div>
+      <div>
+        <sec-header tip="力量型"></sec-header>
+        <div class="container">
+          <a v-for="(item,key) in phyHero" :key="key" class="cell-main" @click="clickHeroItem(item)">
+            <img :src="item.icon" class="cell-img">
+            <div class="cell-text">{{item.name}}</div>
+          </a>
+        </div>
       </div>
-    </div>
 
-    <div>
-      <sec-header tip="敏捷型"></sec-header>
-      <div class="container">
-        <a v-for="(item,key) in dexHero" :key="key" class="cell-main" @click="clickHeroItem(item)">
-          <img :src="item.icon" class="cell-img">
-          <div class="cell-text">{{item.name}}</div>
-        </a>
+      <div>
+        <sec-header tip="敏捷型"></sec-header>
+        <div class="container">
+          <a v-for="(item,key) in dexHero" :key="key" class="cell-main" @click="clickHeroItem(item)">
+            <img :src="item.icon" class="cell-img">
+            <div class="cell-text">{{item.name}}</div>
+          </a>
+        </div>
       </div>
-    </div>
 
-    <div>
-      <sec-header tip="智力型"></sec-header>
-      <div class="container">
-        <a v-for="(item,key) in intHero" :key="key" class="cell-main" @click="clickHeroItem(item)">
-          <img :src="item.icon" class="cell-img">
-          <div class="cell-text">{{item.name}}</div>
-        </a>
+      <div>
+        <sec-header tip="智力型"></sec-header>
+        <div class="container">
+          <a v-for="(item,key) in intHero" :key="key" class="cell-main" @click="clickHeroItem(item)">
+            <img :src="item.icon" class="cell-img">
+            <div class="cell-text">{{item.name}}</div>
+          </a>
+        </div>
       </div>
-    </div>
+    <!-- </section> -->
+  </scroller>
   </div>
+
 </template>
 
 <script>
@@ -62,12 +67,57 @@ export default {
       } else {
         this.$router.push({path: '/pvphero/' + item.code})
       }
+    },
+    refresh (done) {
+      setTimeout(() => {
+        for (var i = 0; i < this.dexHero.length; i++) {
+          this.intHero.push(this.dexHero[i])
+        }
+        // self.$refs.myscroller.resize()
+        done()
+      }, 3000)
+    },
+    infinite (done) {
+      if (this.intHero.length > 30) {
+        this.$refs.myscroller.finishInfinite(2)
+        return
+      }
+      setTimeout(() => {
+        for (var i = 0; i < this.dexHero.length; i++) {
+          this.intHero.push(this.dexHero[i])
+          if (i > 5) {
+            break
+          }
+        }
+        if (this.intHero.length > 30) {
+          this.$refs.myscroller.finishInfinite(2)
+        } else {
+          done()
+        }
+      }, 3000)
     }
   }
 }
 </script>
 
 <style scoped>
+.page{
+		position: absolute;
+		top: 0;
+		left: 0;
+    right: 0;
+    bottom: 0;
+		background-color: #f00;
+		/*z-index: 102;*/
+	}
+.scroll_section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 0.5rem;
+}
 .container {
     justify-content: 'space-around';
     align-items: 'flex-start';

@@ -1,6 +1,6 @@
 <template>
-  <div class="postlist_container" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="touchend" ref="loadmore" style="font-size:12px;">
+  <div class="postlist_container">
+    <!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="touchend" ref="loadmore" style="font-size:12px;">
       <ul v-if="dataArray.length" type="1">
         <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
           <info-cell :item="item"></info-cell>
@@ -12,7 +12,7 @@
         </li>
       </ul>
       <p v-if="touchend" class="empty_data">没有更多了</p>
-    </mt-loadmore>
+    </mt-loadmore> -->
 
     <aside class="return_top" @click="backTop" v-if="showBackStatus">
 			<svg class="back_top_svg">
@@ -38,12 +38,13 @@ export default {
       showLoading: true, // 显示加载动画
       touchend: false, // 没有更多数据
       limit: 10,
-      wrapperHeight: 0
+      items: []
     }
   },
   mounted () {
-    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top
-    this.refresh()
+    for (var i = 1; i <= 20; i++) {
+      this.items.push(i + ' - keep walking, be 2 with you.')
+    }
   },
   components: {
     infoCell
@@ -56,11 +57,15 @@ export default {
   watch: {
   },
   methods: {
-    loadTop () {
-      this.refresh()
+    loadTop (done) {
+      setTimeout(() => {
+        done()
+      }, 1500)
     },
-    loadBottom () {
-      this.loaderMore()
+    loadBottom (done) {
+      setTimeout(() => {
+        done()
+      }, 1500)
     },
     refresh () {
       this.loadData(true)

@@ -11,7 +11,7 @@ export var hdyjData = [
     "icon" : null,
     "bloodbar" : "",
     "name" : "大元帅",
-    "feat_value" : "1000K"
+    "feat_value" : "100K"
   },
   {
     "reward1" : 50007,

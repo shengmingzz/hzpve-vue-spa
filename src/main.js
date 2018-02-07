@@ -7,11 +7,8 @@ import router from './router'
 import store from './store'
 import './config/rem'
 import FastClick from 'fastclick'
-
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
-
-Vue.use(MintUI)
+import VueScroller from 'vue-scroller'
+Vue.use(VueScroller)
 
 Vue.config.productionTip = false
 

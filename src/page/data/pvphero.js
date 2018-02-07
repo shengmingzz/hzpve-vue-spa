@@ -13,11 +13,11 @@ export function getPhyiscal() {
 }
 // 敏捷型
 export function getDexterity() {
-  return getHeroByType(1)
+  return getHeroByType(2)
 }
 // 智力型
 export function getIntelligence() {
-  return getHeroByType(1)
+  return getHeroByType(3)
 }
 export function getHeroByType(type) {
   var array = []
