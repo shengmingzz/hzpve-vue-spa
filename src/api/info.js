@@ -3,6 +3,7 @@ import fetch from './fetch'
 import {devserverurl, htmlserverurl} from './env'
 
 let serverUrl = 'http://192.168.244.65:5000/api/graphql'
+// let serverUrl = 'https://yhzs.99.com/api/graphql'
 
 export function getNews (offset, limit, type) {
   let query = 'normalNewsList(offset:' + offset + ',limit:' + limit + ',type:' + type + ')'

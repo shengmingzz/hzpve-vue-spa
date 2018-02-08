@@ -1,16 +1,16 @@
 <template>
   <div class="cell">
     <div v-if="cellType()==0" class="cellnone">
-      <h4>{{item.title}}
-      </h4>
+      <div>{{item.title}}
+      </div>
       <info-item :item="item" class="item0"></info-item>
     </div>
 
     <div v-if="cellType()==1" class="cellone">
       <div class="left">
         <div class="up">
-          <h4>{{item.title}}
-          </h4>
+          <div>{{item.title}}
+          </div>
         </div>
         <info-item :item="item" class="item"></info-item>
       </div>
@@ -18,8 +18,8 @@
     </div>
 
     <div v-if="cellType()==3" class="cellthrid">
-      <h4>{{item.title}}
-      </h4>
+      <div>{{item.title}}
+      </div>
       <div class="imgs">
         <img :src="item.thumbnail4Rec" :onerror="logo">
         <img :src="item.thumbnail4Rec" :onerror="logo">
@@ -64,7 +64,7 @@ export default {
 <style lang="scss" scoped>
 .cell {
   padding: .6rem .6rem .6rem .6rem;
-  border-bottom: .03rem solid #dddddd;
+  border-bottom: .01rem solid #eee;
   width: 100%;
   h4{font-size: .7rem;color: #333;}
   img {
@@ -80,6 +80,9 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
+  div {
+    text-align: left;
+  }
   .item0 {
     margin-top: .6rem;
     width: 100%;
@@ -93,21 +96,22 @@ export default {
   height: 4.15rem;
   .left {
     flex: 1;
-    height: 100%;
+    height: 4.15rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
     padding: 0rem 0.6rem 0rem 0rem;
     .up {
-      flex: 1;
+      align-self: flex-start;
+      flex: 3;
       width: 100%;
-
-      margin-top: 0.45rem;
+      text-align: left;
+      font-size: .7rem;color: #333;
     }
     .item {
       width: 100%;
-      margin-bottom: .3rem
+      flex: 1;
     }
   }
 }

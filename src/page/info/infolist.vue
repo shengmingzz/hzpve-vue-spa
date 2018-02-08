@@ -1,7 +1,7 @@
 <template>
-  <div class="postlist_container">
-    <!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="touchend" ref="loadmore" style="font-size:12px;">
-      <ul v-if="dataArray.length" type="1">
+  <div class="page">
+    <scroller :on-refresh="refresh" :onInfinite="loaderMore" ref="myscroller" refreshLayerColor="#333" loadingLayerColor="#333">
+      <ul v-if="dataArray.length">
         <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
           <info-cell :item="item"></info-cell>
         </section>
@@ -11,22 +11,13 @@
           <img src="../../img/info/shopback.svg" class="list_back_svg">
         </li>
       </ul>
-      <p v-if="touchend" class="empty_data">没有更多了</p>
-    </mt-loadmore> -->
-
-    <aside class="return_top" @click="backTop" v-if="showBackStatus">
-			<svg class="back_top_svg">
-				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
-			</svg>
-		</aside>
-
+    </scroller>
   </div>
 </template>
 
 <script>
 import {getNews} from '../../api/info'
 import infoCell from './infocell'
-// var _ = require('lodash-node')
 
 export default {
   data () {
@@ -38,13 +29,11 @@ export default {
       showLoading: true, // 显示加载动画
       touchend: false, // 没有更多数据
       limit: 10,
-      items: []
+      code: 0
     }
   },
   mounted () {
-    for (var i = 1; i <= 20; i++) {
-      this.items.push(i + ' - keep walking, be 2 with you.')
-    }
+    this.$refs.myscroller.triggerPullToRefresh()
   },
   components: {
     infoCell
@@ -53,56 +42,22 @@ export default {
   computed: {
   },
   created () {
+    this.code = this.type
   },
   watch: {
+    '$route' (to, from) {
+    }
   },
   methods: {
-    loadTop (done) {
-      setTimeout(() => {
+    // 下拉刷新
+    refresh (done) {
+      getNews(0, this.limit, this.type).then((response) => {
         done()
-      }, 1500)
-    },
-    loadBottom (done) {
-      setTimeout(() => {
-        done()
-      }, 1500)
-    },
-    refresh () {
-      this.loadData(true)
-    },
-    // 到达底部加载更多数据
-    loaderMore () {
-      this.loadData(false)
-    },
-    loadData (refresh) {
-      let offset = refresh ? 0 : this.dataArray.length
-      if (this.touchend && !refresh) {
-        return
-      }
-      // 防止重复请求
-      if (this.preventRepeatReuqest) {
-        return
-      }
-      this.preventRepeatReuqest = true
-      getNews(offset, this.limit, this.type).then((response) => {
-        if (refresh) {
-          this.$refs.loadmore.onTopLoaded()
-        } else {
-          this.$refs.loadmore.onBottomLoaded()
-        }
         this.preventRepeatReuqest = false
         let res = response.data
-        // console.log(res)
         if (res.hasOwnProperty('data')) {
           let data = res.data
-          if (refresh) {
-            this.dataArray = [...data.normalNewsList]
-          } else {
-            this.dataArray = [...this.dataArray, ...res.data]
-          }
-          if (this.type === 0) {
-            console.log('data.normalNewsList.length:' + data.normalNewsList.length)
-          }
+          this.dataArray = [...data.normalNewsList]
           if (data.normalNewsList.length < this.limit) {
             this.touchend = true
           } else {
@@ -111,9 +66,42 @@ export default {
         }
       }).catch(error => {
         this.preventRepeatReuqest = false
+        done()
         console.log(error)
       })
     },
+    // 到达底部加载更多数据
+    loaderMore (done) {
+      let offset = this.dataArray.length
+      if (this.touchend) {
+        this.$refs.myscroller.finishInfinite(1)
+        return
+      }
+      // 防止重复请求
+      if (this.preventRepeatReuqest) {
+        return
+      }
+      this.preventRepeatReuqest = true
+      getNews(offset, this.limit, this.type).then((response) => {
+        done()
+        this.preventRepeatReuqest = false
+        let res = response.data
+        if (res.hasOwnProperty('data')) {
+          let data = res.data
+          this.dataArray = [...this.dataArray, ...data.normalNewsList]
+          if (data.normalNewsList.length < this.limit) {
+            this.touchend = true
+          } else {
+            this.touchend = false
+          }
+        }
+      }).catch(error => {
+        this.preventRepeatReuqest = false
+        done()
+        console.log(error)
+      })
+    },
+    // 点击事件
     infoClick (item) {
       console.log(item.id)
       this.$router.push({path: '/infodetail', query: {'id': item.id}})
@@ -122,12 +110,17 @@ export default {
 }
 </script>
 
-<style scoped>
-  .postlist_container{
-		background-color: #fff;
-		/*margin-bottom: 2rem;*/
-    width: 100%;
-	}
+<style lang="scss" scoped>
+@import 'src/style/mixin';
+.page{
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 100%;
+  }
   .list_back_li{
 		height: 4.85rem;
 		.list_back_svg{

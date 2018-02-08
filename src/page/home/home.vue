@@ -26,7 +26,11 @@ export default {
         {'title': 'pvp-英雄', 'icon': require('../../img/raid_zzsl.jpg')},
         {'title': 'pvp-物品', 'icon': require('../../img/thumb_yhjt@2x.png')},
         // info
-        {'title': '资讯', 'icon': require('../../img/BattleMap1.jpg')}
+        {'title': '资讯', 'icon': require('../../img/BattleMap1.jpg')},
+        // tv
+        {'title': 'tv', 'icon': require('../../img/BattleMap2.jpg')},
+        // post
+        {'title': '贴吧', 'icon': require('../../img/BattleMap3.jpg')}
       ]
     }
   },
@@ -74,7 +78,7 @@ export default {
     margin: .5rem .5rem .1rem .5rem;
   }
 .cell-main {
-  width: 50%;
+  width: 33.3%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,14 +88,14 @@ export default {
 }
 .cell-img {
   display: block;
-  height: 5rem;
-  width: 8rem;
+  height: 3.5rem;
+  width: 5.5rem;
   overflow: hidden;
   margin-left: .1rem;
   margin-right: .1rem;
 }
 .cell-text {
-  font-size: 1rem;
+  font-size: .7rem;
   margin-top: 0.2rem;
   margin-bottom: 0.8rem;
   text-align: center;

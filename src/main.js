@@ -7,8 +7,15 @@ import router from './router'
 import store from './store'
 import './config/rem'
 import FastClick from 'fastclick'
+
 import VueScroller from 'vue-scroller'
+import VueLazyLoad from 'vue-lazyload'
+
 Vue.use(VueScroller)
+Vue.use(VueLazyLoad, {
+  error: './img/info/info_ads_default@2x.png',
+  loading: './img/info/info_ads_default@2x.png'
+})
 
 Vue.config.productionTip = false
 
