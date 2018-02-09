@@ -2,6 +2,19 @@ $blue: #3190e8;
 $bc: #e4e4e4;
 $fc:#fff;
 
+$orange:#c88c64;
+$lineColor:#d0d0d0;
+$lineheight:.01rem;
+
+$firFontColor:#333;
+$secFontColor:#999;
+
+$firFontSize:.7rem;
+$secFontSize:.5rem;
+
+$btnNor:#dcaa64;
+$btnGray:#d0d0d0;
+
 // 背景图片地址和大小
 @mixin bis($url) {
 	background-image: url($url);
@@ -67,4 +80,16 @@ $fc:#fff;
 	display: flex;
 	justify-content: $type;
 
+}
+
+
+@mixin fdja($direction: column, $type: space-between, $align: flex-start){
+	display: flex;
+	justify-content: $type;
+	flex-direction: $direction;
+	align-items: $align;
+}
+
+@mixin bottomline {
+	border-bottom: $lineheight solid $lineColor;
 }

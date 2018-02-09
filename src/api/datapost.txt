@@ -1,0 +1,125 @@
++ (NSDictionary *)queryParamforumPostListType:(NSInteger)contentType
+                                  onlyAwesome:(BOOL)onlyAwesome
+                                       offset:(NSInteger)offset
+                                        limit:(NSInteger)limit
+                                      orderBy:(NSString *)orderBy {
+    NSString *awesom = (onlyAwesome==0?@"false":@"true");
+    NSString *query = [NSString stringWithFormat:
+                       @"query{forumPostList(contentType:%ld,onlyAwesome:%@,offset:%ld,limit:%ld,orderBy:\"%@\"){%@}}",
+                       (long)contentType, awesom, (long)offset, (long)limit, orderBy, [HBPostModel fullParamSting]];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+}
+
++ (NSDictionary *)queryParamWritePostWithAuthor:(NSString *)author
+                                        content:(NSString *)content
+                                    contentType:(NSInteger)contentType
+                               postCategoryEnum:(NSInteger)postCategoryEnum
+                                          title:(NSString *)title
+                                         iamges:(NSArray *)imagesWith
+                                          video:(NSString *)videoWith
+                                          voice:(NSString *)voiceWith{
+    NSString *paramStr = [NSString stringWithFormat:@"author:\"%@\",content:\"%@\",contentType:%zd,postCategoryEnum:%zd,title:\"%@\"",author,[content escapeCharaters],contentType,postCategoryEnum,[title escapeCharaters]];
+    if (imagesWith && imagesWith.count) {
+        NSMutableString *imgStr = [@"[" mutableCopy];
+        for (NSString *imgUrl in imagesWith) {
+            [imgStr appendString:[NSString stringWithFormat:@"\"%@\",",imgUrl]];
+        }
+        [imgStr deleteCharactersInRange:NSMakeRange(imgStr.length - 1, 1)];
+        [imgStr appendString:@"]"];
+        paramStr = [paramStr stringByAppendingFormat:@",imagesWith:%@", imgStr];
+    }
+
+    if (videoWith && videoWith.length) {
+        paramStr = [paramStr stringByAppendingFormat:@",videoWith:\"%@\"", videoWith];
+    }
+
+    if (voiceWith && voiceWith.length) {
+        paramStr = [paramStr stringByAppendingFormat:@",voiceWith:\"%@\"", voiceWith];
+    }
+    NSString * query = [NSString stringWithFormat:@"mutation{writePost(%@){status,msg}}",paramStr];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+}
+
++ (NSDictionary *)queryParamReplyPostWithAuthor:(NSString *)author
+                                        content:(NSString *)content
+                                       postType:(NSInteger)postType
+                                    replyToPost:(NSString *)replyToPost
+                               postCategoryEnum:(NSInteger)postCategoryEnum
+                                         iamges:(NSArray *)imagesWith
+                                          voice:(NSString *)voiceWith{
+    NSString *paramStr = [NSString stringWithFormat:@"author:\"%@\",content:\"%@\",postType:%zd,postCategoryEnum:%zd,replyToPost:\"%@\"",author,[content escapeCharaters],postType,postCategoryEnum,replyToPost];
+    if (imagesWith && imagesWith.count) {
+        NSMutableString *imgStr = [@"[" mutableCopy];
+        for (NSString *imgUrl in imagesWith) {
+            [imgStr appendString:[NSString stringWithFormat:@"\"%@\",",imgUrl]];
+        }
+        [imgStr deleteCharactersInRange:NSMakeRange(imgStr.length - 1, 1)];
+        [imgStr appendString:@"]"];
+        paramStr = [paramStr stringByAppendingFormat:@",imagesWith:%@", imgStr];
+    }
+
+    if (voiceWith && voiceWith.length) {
+        paramStr = [paramStr stringByAppendingFormat:@",voiceWith:\"%@\"", voiceWith];
+    }
+    NSString * query = [NSString stringWithFormat:@"mutation{replyPost(%@){status,msg}}",paramStr];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+}
+
++ (NSDictionary *)queryParamForumReplyAsFloorListOffset:(NSInteger)offset
+                                                  limit:(NSInteger)limit
+                                        belongToOriPost:(NSString *)belongToOriPost
+                                                orderBy:(NSString *)orderBy {
+    NSString *query = [NSString stringWithFormat:
+                       @"query{forumReplyAsFloorList(offset:%ld,limit:%ld,belongToOriPost:\"%@\",orderBy:\"%@\"){%@}}",
+                       (long)offset, (long)limit, belongToOriPost, orderBy, [HBPostModel fullParamSting]];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+}
+
++ (NSDictionary *)queryParamForumReplyInFloorListOffset:(NSInteger)offset
+                                                  limit:(NSInteger)limit
+                                        belongToOriPost:(NSString *)belongToOriPost
+                                                orderBy:(NSString *)orderBy{
+    if (orderBy == nil || orderBy.length == 0) {
+        orderBy = @"-createTime";
+    }
+    NSString *query = [NSString stringWithFormat:
+                       @"query{forumReplyInFloorList(offset:%ld,limit:%ld,belongToFloorPost:\"%@\",orderBy:\"%@\"){%@}}",
+                       (long)offset, (long)limit, belongToOriPost,orderBy,[HBPostModel fullParamSting]];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+}
++ (NSDictionary *)queryParamForumPostDetailForumPostId:(NSString *)forumPostId{
+    NSString *query = [NSString stringWithFormat:
+                       @"query{forumPostDetail(ForumPostId:\"%@\"){PostDetail{%@}}}",
+                       forumPostId, [HBPostModel fullParamSting]];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+}
+
++ (NSDictionary *)queryParamlikeForumPostForumPostId:(NSString *)forumPostId
+                                                 uid:(NSString *)uid{
+    NSString * query = [NSString stringWithFormat:@"mutation{likeForumPost(forumPostId:\"%@\",uid:\"%@\"){status,msg}}",forumPostId,uid];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+}
+
++ (NSDictionary *)queryParamcomplainCommentUid:(NSString *)uid
+                                complainReason:(NSInteger)complainReason
+                             complainToComment:(NSString *)complainToComment{
+    NSString * query = [NSString stringWithFormat:@"mutation{complainComment(complainToComment:\"%@\",uid:\"%@\",complainReason:%zd){status,msg}}",complainToComment,uid,complainReason];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+
+}
+
++ (NSDictionary *)deleteForumPostUid:(NSString *)uid
+                                postId:(NSString*)postId {
+    NSString * query = [NSString stringWithFormat:@"mutation{deleteForumPost(deleteForumPost:\"%@\",uid:\"%@\"){status,msg}}",postId,uid];
+    NSDictionary *param = @{@"query" : query};
+    return param;
+
+}

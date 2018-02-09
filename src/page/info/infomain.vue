@@ -1,44 +1,55 @@
 <template>
   <div class="page">
-    <wj-tabbar class="bar" :titles="['最新', '视频', '公告', '新闻']" :ids="['1', '2', '3', '4']" v-model="selected">
-    </wj-tabbar>
-    <div class="container">
-      <info-list class="item" type="0" v-show="selected === '1'"></info-list>
-      <info-list class="item" type="2" v-show="selected === '2'"></info-list>
-      <info-list class="item" type="3" v-show="selected === '3'"></info-list>
-      <info-list class="item" type="1" v-show="selected === '4'"></info-list>
-    </div>
-    <!-- tab-container -->
-    <!-- <wj-tab-container v-model="selected">
-      <wj-tab-container-item id="1">
-        <info-list type="0"></info-list>
-      </wj-tab-container-item>
-      <wj-tab-container-item id="2">
-        <info-list type="2"></info-list>
-      </wj-tab-container-item>
-      <wj-tab-container-item id="3">
-        <info-list type="3"></info-list>
-      </wj-tab-container-item>
-      <wj-tab-container-item id="4">
-        <info-list type="1"></info-list>
-      </wj-tab-container-item>
-    </wj-tab-container> -->
+    <info-list class="item" type="0"></info-list>
+    <!-- <section class="change_show_type" ref="chooseType">
+        <div>
+            <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">最新</span>
+        </div>
+        <div>
+            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">视频</span>
+        </div>
+        <div>
+            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">公告</span>
+        </div>
+        <div>
+            <span :class='{activity_show: changeShowType =="4"}' @click="changeShowType='4'">新闻</span>
+        </div>
+    </section>
+
+    <transition name="fade-choose">
+      <section v-show="changeShowType =='1'" class="item_container">
+        <info-list class="item" type="0"></info-list>
+      </section>
+    </transition>
+    <transition name="fade-choose">
+      <section v-show="changeShowType =='2'" class="item_container">
+        <info-list class="item" type="2"></info-list>
+      </section>
+    </transition>
+    <transition name="fade-choose">
+      <section v-show="changeShowType =='3'" class="item_container">
+        <info-list class="item" type="3"></info-list>
+      </section>
+    </transition>
+    <transition name="fade-choose">
+      <section v-show="changeShowType =='4'" class="item_container">
+        <info-list class="item" type="1"></info-list>
+      </section>
+    </transition> -->
+    <!-- <section class="foot">
+    </section> -->
   </div>
 </template>
 <script>
-import wjTabContainer from '../../components/tab-container/tab-container'
-import wjTabContainerItem from '../../components/tab-container/tab-container-item'
-import wjTabbar from '../../components/tab-bar/tab-bar'
-import infoList from './infolist'
-import infoData from './infoData'
+// import infoList from './infolist'
+import infoList from './infoData'
 export default {
   data () {
     return {
-      selected: '1',
-      tabIndex: 0
+      changeShowType: '1'
     }
   },
-  components: {wjTabContainer, wjTabContainerItem, infoList, wjTabbar, infoData},
+  components: {infoList},
   computed: {},
   created () {
     this.code = this.$route.params.id
@@ -46,31 +57,49 @@ export default {
   mounted () {
   },
   methods: {
-    clickTab (data) {
-      this.containerId = data
-      this.currentIndex = parseInt(data) - 1
-    }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import 'src/style/mixin';
+.change_show_type {
+    display: flex;
+    background-color: #fff;
+    padding: .3rem 0 .6rem;
+    border-bottom: 1px solid #ebebeb;
+    div{
+        flex: 1;
+        text-align: center;
+        span{
+            @include sc(.65rem, #666);
+            padding: .2rem .1rem;
+            border-bottom: 0.12rem solid #fff;
+        }
+        .activity_show{
+            color: $orange;
+            border-color: $orange;
+        }
+    }
+}
+.item_container {
+    display: flex;
+    flex: 1;
+    padding-bottom: 2rem;
+    height: 100%;
+}
 .page {
-  display: flex;
-  flex-direction: column;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
 }
-.bar {
-  background-color: #fff;
-  height: 2.2rem;
-}
-.container {
-  flex: 1;
-  /*display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;*/
-  /*height: 100%;*/
-}
-.item {
-  flex: 1;
-}
+// .foot {
+//   position: fixed;
+//   left: 0;
+//   right: 0;
+//   bottom: -2rem;
+//   height: 5rem;
+//   background-color: #f00;
+// }
 </style>

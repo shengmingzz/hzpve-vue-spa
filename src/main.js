@@ -20,7 +20,7 @@ Vue.use(VueLazyLoad, {
 Vue.config.productionTip = false
 
 // Sync Register Global Components
-Vue.component('fallback', resolve => resolve(require('./components/fallback')))
+// Vue.component('fallback', resolve => resolve(require('./components/fallback')))
 
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function () {

@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <scroller :on-refresh="refresh" :onInfinite="loaderMore" ref="myscroller" refreshLayerColor="#333" loadingLayerColor="#333">
+    <scroller :on-refresh="refresh" :onInfinite="loaderMore" ref="myscroller" refreshLayerColor="#666" loadingLayerColor="#666">
       <ul v-if="dataArray.length">
         <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
           <info-cell :item="item"></info-cell>
@@ -11,6 +11,7 @@
           <img src="../../img/info/shopback.svg" class="list_back_svg">
         </li>
       </ul>
+      <!-- <p v-if="touchend" class="empty_data">没有更多了</p> -->
     </scroller>
   </div>
 </template>
@@ -33,7 +34,6 @@ export default {
     }
   },
   mounted () {
-    this.$refs.myscroller.triggerPullToRefresh()
   },
   components: {
     infoCell
@@ -63,6 +63,11 @@ export default {
           } else {
             this.touchend = false
           }
+          // if (this.touchend) {
+          //   this.$refs.myscroller.finishInfinite(1)
+          // } else {
+          //   this.$refs.myscroller.finishInfinite(0)
+          // }
         }
       }).catch(error => {
         this.preventRepeatReuqest = false
@@ -74,7 +79,7 @@ export default {
     loaderMore (done) {
       let offset = this.dataArray.length
       if (this.touchend) {
-        this.$refs.myscroller.finishInfinite(1)
+        // this.$refs.myscroller.finishInfinite(1)
         return
       }
       // 防止重复请求
@@ -94,6 +99,12 @@ export default {
           } else {
             this.touchend = false
           }
+          // if (this.touchend) {
+          //   this.$refs.myscroller.finishInfinite(2)
+          // } else {
+          //   this.$refs.myscroller.finishInfinite(0)
+          // }
+          console.log(JSON.stringify(data.normalNewsList))
         }
       }).catch(error => {
         this.preventRepeatReuqest = false

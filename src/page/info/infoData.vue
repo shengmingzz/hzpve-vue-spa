@@ -1,71 +1,96 @@
 <template>
-  <div class="infolist_container">
-    <scroller :on-refresh="refresh" ref="myscroller" :onInfinite="loaderMore" refreshLayerColor="#666">
-      <ul v-load-more="loaderMore" v-if="infoListArray.length" type="1">
-        <div v-for="(item,key) in infoListArray" tag='li' :key="key" style="height:4rem;" :style="key%2 === 0 ? 'background-color:#ccc':'background-color:#fff'">
-          {{item}}
-        </div>
+  <div class="infolist_container" >
+    <section id="scroll_section" class="scroll_container">
+      <ul v-load-more="loaderMoreData()" v-if="dataArray.length" type="1">
+        <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
+          <info-cell :item="item"></info-cell>
+        </section>
       </ul>
       <ul v-else class="animation_opactiy">
         <li class="list_back_li" v-for="item in 10" :key="item">
-          <img src="../../img/info/shopback.svg" class="list_back_svg">
+          <img src="../../image/shopback.svg" class="list_back_svg">
         </li>
       </ul>
       <p v-if="touchend" class="empty_data">没有更多了</p>
-      <div ref="abc" style="background-color: red;"></div>
-      </scroller>
-    </div>
+    </section>
+
+    <aside class="return_top" @click="backTop" v-if="showBackStatus">
+			<svg class="back_top_svg">
+				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
+			</svg>
+		</aside>
+    <div ref="abc" style="background-color: red;"></div>
+		<transition name="loading">
+			<loading v-show="showLoading"></loading>
+		</transition>
+  </div>
 </template>
 
 <script>
-import {loadMore} from '@/components/mixin'
+import {loadMore} from '../../components/mixin'
+import loading from '../../components/loading'
+import {showBack, animate} from '../../config/mUtils'
+import {getNews} from '@/api/info'
+import infoCell from './infocell'
+import BScroll from 'better-scroll'
 export default {
   data () {
     return {
       offset: 0,
-      infoListArray: [],
+      limit: 20,
+      dataArray: [],
       preventRepeatReuqest: false, // 到达底部加载数据，防止重复加载
       showBackStatus: false, // 显示返回顶部按钮
       showLoading: true, // 显示加载动画
-      touchend: false // 没有更多数据
+      touchend: false, // 没有更多数据
+      infoScroll: null
     }
   },
   mounted () {
     this.refresh()
   },
   components: {
+    loading, infoCell
   },
   mixins: [loadMore],
-  props: ['channel'],
+  props: ['type'],
   computed: {
   },
   methods: {
-    refresh (done) {
-      // let items = ['1', '2', '3', '4', '5']
-      // this.infoListArray = [...items]
-      // console.log(JSON.stringify(this.infoListArray))
-      var data = new Promise((resolve, reject) => {
-        var array = []
-        for (var i = 0; i < 10; i++) {
-          array.push(i + '')
+    hideLoading () {
+      this.showLoading = false
+    },
+    refresh () {
+      getNews(0, this.limit, this.type).then((response) => {
+        // console.log(JSON.stringify(response.data))
+        this.hideLoading()
+        let res = response.data
+        if (res.hasOwnProperty('data')) {
+          let data = res.data
+          this.dataArray = [...data.normalNewsList]
+          if (data.normalNewsList.length < this.limit) {
+            this.touchend = true
+          }
         }
-        resolve(array)
-      }).then(response => {
-        this.infoListArray = [...response]
-        console.log(JSON.stringify(this.infoListArray))
-        done()
-        if (this.infoListArray.length > 50) {
-          this.touchend = true
-        } else {
-          this.touchend = false
-        }
+        showBack(status => {
+          this.showBackStatus = status
+        })
+        this.$nextTick(() => {
+          this.infoScroll = new BScroll('#scroll_section', {
+            deceleration: 0.001,
+            bounce: true,
+            click: true,
+            swipeTime: 1800
+          })
+        })
+      }).catch(error => {
+        this.hideLoading()
+        console.log(error)
       })
-      return data
     },
     // 到达底部加载更多数据
-    loaderMore (done) {
+    loaderMoreData () {
       if (this.touchend) {
-        this.$refs.myscroller.finishInfinite(1)
         return
       }
       // 防止重复请求
@@ -74,92 +99,52 @@ export default {
       }
       this.showLoading = true
       this.preventRepeatReuqest = true
-
-      var data = new Promise((resolve, reject) => {
-        var array = []
-        for (var i = 0; i < 10; i++) {
-          array.push(i + this.infoListArray.length + '')
+      getNews(this.dataArray.length, this.limit, this.type).then((response) => {
+        this.hideLoading()
+        let res = response.data
+        if (res.hasOwnProperty('data')) {
+          let data = res.data
+          this.dataArray = [...this.dataArray, ...data.normalNewsList]
+          if (data.normalNewsList.length < this.limit) {
+            this.touchend = true
+          }
+          this.preventRepeatReuqest = false
         }
-        resolve(array)
-      }).then(response => {
-        this.infoListArray = [...this.infoListArray, ...response]
-        this.preventRepeatReuqest = false
-        if (this.infoListArray.length > 50) {
-          this.touchend = true
-        }
-        console.log(JSON.stringify(this.infoListArray))
-        done()
+      }).catch(error => {
+        this.hideLoading()
+        console.log(error)
       })
-      return data
+    },
+    // 点击事件
+    infoClick (item) {
+      console.log(item.id)
+      this.$router.push({path: '/infodetail', query: {'id': item.id}})
     },
     // 返回顶部
     backTop () {
-    },
-    hideLoading () {
-      this.showLoading = false
+      animate(document.body, {scrollTop: '0'}, 400, 'ease-out')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/style/mixin';
-  .infolist_container{
-    background-color: #fff;
-		margin-bottom: 2rem;
-    width: 100%;
+	@import 'src/style/mixin';
+	.infolist_container{
+		// background-color: #fff;
+		// margin-bottom: 2rem;
+    // width: 100%;
+    position: fixed;
+		top: 0;
+		left: 0;
+    right: 0;
+    bottom: 0;
+		background-color: #fff;
+		z-index: 102;
 	}
-  .cell-main {
-    padding: .28rem .2rem;
-    display: block;
-    color: inherit;
-    height: 100%;
-    position: relative;
-    box-sizing: border-box;
-    margin: -.08rem 0;
-    border-bottom: .025rem solid #eee;
-    .cell-img {
-      display: block;
-      position: absolute;
-      width: 4.8rem;
-      height: 2.7rem;
-      text-align: center;
-      overflow: hidden;
-    }
-    .cell-right {
-        margin-left: 5.1rem;
-        position: relative;
-        height: 2.7rem;
-        .cell-right-title {
-            padding-top: .1rem;
-            margin-bottom: .12rem;
-            font-size: .6rem;//.3rem;
-            font-weight: 400;
-            color: #333;
-        }
-        .cell-right-desc {
-            font-size: 0.5rem;//.24rem;
-            height: .68rem;
-            margin-bottom: .16rem;
-            color: #666;
-            // text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-    }
+  .scroll_container{
+      @include wh(100%, 100%);
   }
-  .text-block {
-      line-height: 1.41;
-      text-align: justify;
-  }
-  .single-line {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   .list_back_li{
 		height: 4.85rem;
 		.list_back_svg{
@@ -176,7 +161,8 @@ export default {
 		text-align: center;
 		line-height: 2rem;
 	}
-	.return_top{
+  .return_top{
+    background-color: #f00;
 		position: fixed;
 		bottom: 3rem;
 		right: 1rem;

@@ -62,11 +62,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../style/mixin';
 .cell {
   padding: .6rem .6rem .6rem .6rem;
-  border-bottom: .01rem solid #eee;
+  @include bottomline;
   width: 100%;
-  h4{font-size: .7rem;color: #333;}
+  h4 {
+    @include sc($firFontSize, $firFontColor)
+  }
   img {
     width: 5.55rem;
     height: 4.15rem;
@@ -76,9 +79,7 @@ export default {
   }
 }
 .cellnone {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  @include fdja(column, flex-start)
   width: 100%;
   div {
     text-align: left;
@@ -89,25 +90,20 @@ export default {
   }
 }
 .cellone {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  @include fdja(row, flex-start);
   width: 100%;
   height: 4.15rem;
   .left {
     flex: 1;
     height: 4.15rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
+    @include fdja(column, space-between, flex-start)
     padding: 0rem 0.6rem 0rem 0rem;
     .up {
       align-self: flex-start;
       flex: 3;
       width: 100%;
       text-align: left;
-      font-size: .7rem;color: #333;
+      @include sc($firFontSize, $firFontColor);
     }
     .item {
       width: 100%;
@@ -116,17 +112,14 @@ export default {
   }
 }
 .cellthrid {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  @include fdja(column, flex-start);
   width: 100%;
   .imgs {
     margin-top: .6rem;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
+    @include fdja(row, space-between)
   }
   .item3 {
+    text-align: left;
     margin-top: .6rem;
     width: 100%;
   }

@@ -1,0 +1,298 @@
+#define PasswordMd5Key @"507a8b016ca3813efa9baf0d9e56d444"
+#define URL_main @"https://yhzs.99.com/api/graphql"
+
+/*
+ * 获取新闻资讯
+ */
++ (void)getInfoWithType:(NSInteger )type
+                 offset:(NSInteger)offset
+                  limit:(NSInteger)limit
+             bindGameId:(NSString *)bindGameId
+             bindHeroId:(NSString *)bindHeroId
+               callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *parmaStr = [NSString stringWithFormat:@"offset:%zd,limit:%zd,type:%zd",offset,limit,type];
+    if (bindGameId && bindGameId.length) {
+        parmaStr = [parmaStr stringByAppendingFormat:@",bindGameId:\"%@\"", bindGameId];
+    }
+    if (bindHeroId && bindHeroId.length) {
+        parmaStr = [parmaStr stringByAppendingFormat:@",bindHeroId:%@", bindHeroId];
+    }
+    NSString *query = [NSString stringWithFormat:@"{normalNewsList(%@){id,title,pageUrl,writer{id,name},thumbnail4Rec,keyWords,newsType,imageInContent,commentCount,likes,createTime,isAwesome,isFixedAtTop}}",parmaStr];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+/*
+ * 获取新闻资讯详情
+ */
++ (void)getInfoDetailWithNewsId:(NSString*)newsId
+                       callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"{normalNewsDetail(newsId:\"%@\"){id,title, pageUrl ,writer {id, name}, thumbnail4Rec, keyWords, newsType, imageInContent, commentCount, likes, videoUrl, text4video, createTime,  recommendNews{id,title,pageUrl,newsType}}}",newsId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:HBInfoDetailRspModel.class responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 获取轮播图
+ */
++ (void)getSwipNewsWithOffset:(NSInteger)offset
+                        limit:(NSInteger)limit
+                     callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"{slideShow(offset:%@,limit:%@){id,imageUrl,jumpUrl,title,type,news{id,title,newsType,pageUrl}}}",@(offset),@(limit)];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 获取新闻资讯评论
+ */
++ (void)getInfoCommentWithNewsId:(NSString* )newsId
+                          offset:(NSInteger)offset
+                           limit:(NSInteger)limit
+                            type:(HBInfoCommentSortType)type
+                        callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *sort = @"";
+    switch (type) {
+        case HBInfoCommentSortTypeOfTime:
+            sort = @"createTime";
+            break;
+        case HBInfoCommentSortTypeOfHot:
+            sort = @"-likes";
+            break;
+        default:
+            break;
+    }
+    NSString *query = [NSString stringWithFormat:@"{comment(offset:%@,limit:%@,newsReplied:\"%@\",sortBy:\"%@\",type:1){id,content,authorName,replyToComment{id,content,authorName},author{id,avatar,name,token,gameRole{roleId}}authorHeadPic,replyToUserName,belongToComment,createTime,likes,commentCount,subReply{id,content,authorName,replyToComment{id,content,authorName},author{id,avatar,name,token,gameRole{roleId}}authorHeadPic,replyToUserName,createTime,likes,commentCount}}}",@(offset),@(limit),newsId,sort];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:HBInfoCommentListModel.class responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 资讯点赞
+ */
++ (void)favorWithNewsId:(NSString* )newsId
+                    uid:(NSString*)uid
+               callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{likeNews(uid:\"%@\", newsId:\"%@\"){status, msg}}", uid,newsId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 评论点赞
+ */
++ (void)favorWithCommentId:(NSString* )CommentId
+                       uid:(NSString*)uid
+                  callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{likeComment(uid:\"%@\", commentId:\"%@\"){status, msg}}", uid,CommentId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 举报评论 垃圾广告', value: 1, 违规内容', value: 2, 恶意灌水', value: 3, 重复发帖', value: 4
+ */
++ (void)reportWithCommentId:(NSString* )CommentId
+                        uid:(NSString*)uid
+                   reasonId:(NSInteger)reasonId
+                   callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{complainComment(uid:\"%@\",complainReason:%@ complainToComment:\"%@\"){status, msg}}",uid,@(reasonId),CommentId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 收藏新闻
+ */
++ (void)collectWithNewsId:(NSString* )newsId
+                      uid:(NSString*)uid
+                 callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{favouriteNews(uid:\"%@\", newsId:\"%@\"){status, msg}}",uid, newsId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+/*
+ * 删除收藏新闻
+ */
++ (void)delcollectWithNewsId:(NSString* )newsId
+                         uid:(NSString*)uid
+                    callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{removeFavourite(uid:\"%@\", newsId:\"%@\"){status, msg}}",uid, newsId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
++ (void)delcollectWithFavorId:(NSString* )favorId
+                         uid:(NSString*)uid
+                    callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{removeFavourite(uid:\"%@\", favouriteId:\"%@\"){status, msg}}",uid, favorId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+/*
+ * 写评论
+ */
++ (void)commentWithNewsId:(NSString* )newsId
+                     type:(NSInteger)type
+                      uid:(NSString*)uid
+                commentId:(NSString*)commentId
+          replyToUserName:(NSString*)name
+              replyToUser:(NSString*)userId
+          belongToComment:(NSString*)belongToComment
+                  content:(NSString*)content
+                 callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{writeComment(uid:\"%@\", content:\"%@\",type:%@,replyToNews:\"%@\",replyToUserName:\"%@\",replyToComment:\"%@\",replyToUser:\"%@\",belongToComment:\"%@\"){status, msg}}",uid, content ,@(type), newsId,name,commentId,userId,belongToComment];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+/*
+ + (void)commentWithNewsId:(NSString* )newsId
+                     type:(NSInteger)type
+                      uid:(NSString*)uid
+                commentId:(NSString*)commentId
+          replyToUserName:(NSString*)name
+                  content:(NSString*)content
+                 callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{writeComment(uid:\"%@\", content:\"%@\",type:%@,replyToNews:\"%@\",replyToUserName:\"%@\",replyToComment:\"%@\"){status, msg}}",uid, content ,@(type), newsId,name,commentId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+ */
+/*
+ * 获取我的新闻收藏
+ */
++ (void)getInfoCollectWithUid:(NSString *)uid
+                       offset:(NSInteger)offset
+                        limit:(NSInteger)limit
+                     callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+
+    NSString *query = [NSString stringWithFormat:@"{favouriteList(uid:\"%@\",offset:%ld,limit:%ld){id,favouriteNews{id,title,pageUrl,writer{id,name},thumbnail4Rec,keyWords,newsType,imageInContent,commentCount,likes,createTime},type,createTime}}",uid,(long)offset,(long)limit];
+
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+/*
+ * 删除评论
+ */
++ (void)delCommentWithCommentId:(NSString* )commentId
+                         uid:(NSString*)uid
+                    callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *query = [NSString stringWithFormat:@"mutation{deleteComment(uid:\"%@\", deleteComment:\"%@\"){status, msg}}",uid, commentId];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 获取评论楼层
+ */
++ (void)getInfoCommentFloorWithCommentId:(NSString* )commentId
+                          offset:(NSInteger)offset
+                           limit:(NSInteger)limit
+                                    type:(HBInfoCommentSortType)type
+                        callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *sort = @"";
+    switch (type) {
+        case HBInfoCommentSortTypeOfTime:
+            sort = @"createTime";
+            break;
+        case HBInfoCommentSortTypeOfHot:
+            sort = @"-likes";
+            break;
+        default:
+            break;
+    }
+    NSString *query = [NSString stringWithFormat:@"{commentFloor(offset:%@,limit:%@,commentReplied:\"%@\",sortBy:\"%@\"){id,content,authorName,replyToComment{id,content,authorName},author{id,name,token,gameRole{roleId}}authorHeadPic,replyToUserName,belongToComment,createTime,likes,commentCount,subReply{id,content,authorName,replyToComment{id,content,authorName},author{id,name,token,gameRole{roleId}}authorHeadPic,replyToUserName,createTime,likes,commentCount}}}",@(offset),@(limit),commentId,sort];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:HBInfoCommentFloorListModel.class responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
+
+/*
+ * 获取新闻资讯tag
+ */
++ (void)getInfoWithTag:(NSString* )tag
+                 offset:(NSInteger)offset
+                  limit:(NSInteger)limit
+               callBack:(void (^)(BOOL succeed, NSString *msg, id object))callBack {
+    NSString *url = URL_main;
+    NSString *parmaStr = [NSString stringWithFormat:@"offset:%zd,limit:%zd,keyWords:\"%@\"",offset,limit,tag];
+    NSString *query = [NSString stringWithFormat:@"{queryNormalNews(%@){id,title,pageUrl,writer{id,name},thumbnail4Rec,keyWords,newsType,imageInContent,commentCount,likes,createTime}}",parmaStr];
+    NSDictionary *param = @{@"query" : query};
+    [HBNetworkHelper POST:url parameters:param modelClass:nil responseCache:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        callBack(true, @"获取成功", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(false, @"获取失败", nil);
+    }];
+}
