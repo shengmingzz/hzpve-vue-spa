@@ -71,8 +71,7 @@ export default {
     @include sc($firFontSize, $firFontColor)
   }
   img {
-    width: 5.55rem;
-    height: 4.15rem;
+    @include wh(5.55rem, 4.15rem)
     border-radius:.3rem;
     overflow: hidden;
     align-self: center;

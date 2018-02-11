@@ -17,17 +17,13 @@ export function getNews (offset, limit, type) {
 }
 export function getNewsDetail (newsId) {
   let query = 'normalNewsDetail(newsId:' + '"' + newsId + '")'
-  query += '{id,title, pageUrl, writer{id, name}, thumbnail4Rec, keyWords, newsType, imageInContent, commentCount,likes}'
+  query += '{id,title, pageUrl, writer{id, name}, thumbnail4Rec, keyWords, newsType, imageInContent, commentCount,likes,recommendNews{id,title,pageUrl,newsType}}'
   query = 'query{' + query + '}'
   // console.log(query)
   let params = {
     query: query
   }
-  return fetch({
-    url: serverUrl,
-    method: 'post',
-    params
-  })
+  return devbaseReq(params)
 }
 export function loadHtml (url) {
   const data = {

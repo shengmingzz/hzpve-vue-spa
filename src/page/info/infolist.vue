@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <scroller :on-refresh="refresh" :onInfinite="loaderMore" ref="myscroller" refreshLayerColor="#666" loadingLayerColor="#666">
+    <scroller :on-refresh="refresh" :onInfinite="loaderMore" :ref="refstr" refreshLayerColor="#333" loadingLayerColor="#333">
       <ul v-if="dataArray.length">
         <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
           <info-cell :item="item"></info-cell>
@@ -11,7 +11,6 @@
           <img src="../../img/info/shopback.svg" class="list_back_svg">
         </li>
       </ul>
-      <!-- <p v-if="touchend" class="empty_data">没有更多了</p> -->
     </scroller>
   </div>
 </template>
@@ -34,11 +33,12 @@ export default {
     }
   },
   mounted () {
+    this.$refs[this.refstr].triggerPullToRefresh()
   },
   components: {
     infoCell
   },
-  props: ['type'],
+  props: ['type', 'refstr'],
   computed: {
   },
   created () {
@@ -58,16 +58,8 @@ export default {
         if (res.hasOwnProperty('data')) {
           let data = res.data
           this.dataArray = [...data.normalNewsList]
-          if (data.normalNewsList.length < this.limit) {
-            this.touchend = true
-          } else {
-            this.touchend = false
-          }
-          // if (this.touchend) {
-          //   this.$refs.myscroller.finishInfinite(1)
-          // } else {
-          //   this.$refs.myscroller.finishInfinite(0)
-          // }
+          this.isTouchend(data.normalNewsList.length < this.limit)
+          this.showLoadMore()
         }
       }).catch(error => {
         this.preventRepeatReuqest = false
@@ -79,7 +71,7 @@ export default {
     loaderMore (done) {
       let offset = this.dataArray.length
       if (this.touchend) {
-        // this.$refs.myscroller.finishInfinite(1)
+        this.$refs[this.refstr].finishInfinite(2)
         return
       }
       // 防止重复请求
@@ -94,17 +86,9 @@ export default {
         if (res.hasOwnProperty('data')) {
           let data = res.data
           this.dataArray = [...this.dataArray, ...data.normalNewsList]
-          if (data.normalNewsList.length < this.limit) {
-            this.touchend = true
-          } else {
-            this.touchend = false
-          }
-          // if (this.touchend) {
-          //   this.$refs.myscroller.finishInfinite(2)
-          // } else {
-          //   this.$refs.myscroller.finishInfinite(0)
-          // }
-          console.log(JSON.stringify(data.normalNewsList))
+          this.isTouchend(data.normalNewsList.length < this.limit)
+          this.showLoadMore()
+          // console.log(JSON.stringify(data.normalNewsList))
         }
       }).catch(error => {
         this.preventRepeatReuqest = false
@@ -112,10 +96,21 @@ export default {
         console.log(error)
       })
     },
+    showLoadMore () {
+      if (this.touchend) {
+        this.$refs[this.refstr].finishInfinite(2)
+      } else {
+        this.$refs[this.refstr].finishInfinite(0)
+      }
+    },
+    isTouchend (end) {
+      this.touchend = end
+    },
     // 点击事件
     infoClick (item) {
       console.log(item.id)
-      this.$router.push({path: '/infodetail', query: {'id': item.id}})
+      // this.$router.push({path: '/infodetail', query: {'id': item.id}})
+      this.$router.push({path: '/infodetail/' + item.id})
     }
   }
 }

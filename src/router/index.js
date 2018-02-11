@@ -45,6 +45,7 @@ const itemdetail = r => require.ensure([], () => r(require('@/page/game/pvpitemd
 
 // info
 const infomain = r => require.ensure([], () => r(require('@/page/info/infomain')), 'infomain')
+const infodetail = r => require.ensure([], () => r(require('@/page/info/infodetail')), 'infodetail')
 
 const routes = [
   {
@@ -93,7 +94,8 @@ const routes = [
       {path: '/pvpitem/:id', component: itemdetail, meta: { title: 'pvp物品详情' }},
 
       // info
-      {path: '/infomain', component: infomain, meta: { title: '资讯' }}
+      {path: '/infomain', component: infomain, meta: { title: '资讯' }},
+      {path: '/infodetail/:id', component: infodetail, meta: { title: '资讯详情' }}
     ]
   }
 ]
