@@ -61,6 +61,8 @@ export default {
         this.$router.push({path: '/pvpitem'})
       } else if (index === 8) {
         this.$router.push({path: '/infomain'})
+      } else if (index === 9) {
+        this.$router.push({path: '/tvmain'})
       }
     }
   }

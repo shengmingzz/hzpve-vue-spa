@@ -20,7 +20,14 @@
         </a>
       </div>
     </div>
-    <div class="comm">
+
+    <div v-if="item && comms">
+      <sec-header tip="评论"></sec-header>
+      <div class="container">
+        <a v-for="(comm,key) in comms" :key="key" class="keywords" @click="clickComm(comm)">
+          <div >{{comm.content}}</div>
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -38,7 +45,8 @@ export default {
       html: '',
       showLoading: false,
       newsId: '',
-      item: null
+      item: null,
+      comms: []
     }
   },
   mounted () {
@@ -115,14 +123,14 @@ export default {
   .container {
       justify-content: 'space-around';
       align-items: 'flex-start';
-      background-color: #eee;
+      background-color: #fff;
       display: flex;
       flex-flow: row wrap;
       align-content: flex-start;
       margin: .5rem .5rem .1rem .5rem;
     }
   .keywords {
-    background-color: #ccc;
+    background-color: #eee;
     padding: .3rem 1rem;
     font-size: 0.7rem;
     text-align: center;
@@ -130,17 +138,18 @@ export default {
     margin-right: .7rem;
     margin-top: .3rem;
     margin-bottom: .3rem;
+    border-radius: .3rem;
   }
   .containerrec {
     display: flex;
     flex-flow: column wrap;
-    background-color: #ccc;
+    background-color: #eee;
     margin: .5rem .5rem .1rem .5rem;
   }
   .recommend {
-    padding: .3rem 1rem;
+    padding: .1rem .3rem;
     font-size: 0.7rem;
     color: #666;
-    margin: .5rem .5rem .1rem .5rem;
+    margin: .3rem .1rem .1rem .1rem;
   }
 </style>

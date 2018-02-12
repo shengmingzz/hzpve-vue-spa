@@ -1,9 +1,10 @@
 <template>
   <div class="page">
     <scroller :on-refresh="refresh" :onInfinite="loaderMore" :ref="refstr" refreshLayerColor="#333" loadingLayerColor="#333">
-      <ul v-if="dataArray.length">
-        <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
-          <info-cell :item="item"></info-cell>
+      <ul v-if="dataArray.length" class="container">
+        <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="tvClick(item)" class="tvitem">
+          <img :src="item.thumbnail4Rec" class="img">
+          <div class="text">{{item.title}}</div>
         </section>
       </ul>
       <ul v-else class="animation_opactiy">
@@ -16,9 +17,7 @@
 </template>
 
 <script>
-import {getNews} from '../../api/info'
-import infoCell from './infocell'
-// import Md5 from '../../config/Md5'
+import {getTv} from '../../api/info'
 
 export default {
   data () {
@@ -30,24 +29,20 @@ export default {
       showLoading: true, // 显示加载动画
       touchend: false, // 没有更多数据
       limit: 10,
-      code: 0
+      code: 0,
+      page: 1
     }
   },
   mounted () {
     this.$refs[this.refstr].triggerPullToRefresh()
   },
   components: {
-    infoCell
   },
   props: ['type', 'refstr'],
   computed: {
   },
   created () {
     this.code = this.type
-    // var date = Date.parse(new Date())
-    // var md5 = Md5.hex_md5('ZRpyN4zTxb9ualwA!mvj2fP$&@BoWGEF' + parseInt(date / 1000))
-    // console.log(date)
-    // console.log(md5)
   },
   watch: {
     '$route' (to, from) {
@@ -56,7 +51,9 @@ export default {
   methods: {
     // 下拉刷新
     refresh (done) {
-      getNews(0, this.limit, this.type).then((response) => {
+      var typestr = this.type === 0 ? 'recommend' : (this.type === 1 ? 'huya' : (this.type === 2 ? 'chushou' : (this.type === 3 ? 'longzhu' : 'douyu')))
+      getTv(1, typestr).then((response) => {
+        console.log(JSON.stringify(response.data))
         done()
         this.preventRepeatReuqest = false
         let res = response.data
@@ -66,6 +63,7 @@ export default {
           this.isTouchend(data.normalNewsList.length < this.limit)
           this.showLoadMore()
         }
+        this.page++
       }).catch(error => {
         this.preventRepeatReuqest = false
         done()
@@ -74,7 +72,6 @@ export default {
     },
     // 到达底部加载更多数据
     loaderMore (done) {
-      let offset = this.dataArray.length
       if (this.touchend) {
         this.$refs[this.refstr].finishInfinite(2)
         return
@@ -84,7 +81,8 @@ export default {
         return
       }
       this.preventRepeatReuqest = true
-      getNews(offset, this.limit, this.type).then((response) => {
+      var typestr = this.type === 0 ? 'recommend' : (this.type === 1 ? 'huya' : (this.type === 2 ? 'chushou' : (this.type === 3 ? 'longzhu' : 'douyu')))
+      getTv(this.page, typestr).then((response) => {
         done()
         this.preventRepeatReuqest = false
         let res = response.data
@@ -93,8 +91,8 @@ export default {
           this.dataArray = [...this.dataArray, ...data.normalNewsList]
           this.isTouchend(data.normalNewsList.length < this.limit)
           this.showLoadMore()
-          // console.log(JSON.stringify(data.normalNewsList))
         }
+        this.page++
       }).catch(error => {
         this.preventRepeatReuqest = false
         done()
@@ -179,6 +177,35 @@ export default {
       font-size: .7rem;
       text-align: center;
       margin-top: .5rem;
+    }
+  }
+  .container {
+      justify-content: 'space-around';
+      align-items: 'flex-start';
+      background-color: #eee;
+      display: flex;
+      flex-flow: row wrap;
+      align-content: flex-start;
+      margin: .2rem .3rem;
+    }
+  .tvitem {
+    width: 50%;
+    height: 6.5rem;
+    display: flex;
+    flex-direction: column;
+    .img {
+      margin-left: .2rem;
+      margin-right: .2rem;
+      height: 5rem;
+    }
+    .text {
+      font-size: .5rem;
+      color: #333;
+      height: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      margin-left: .3rem;
+      margin-right: .3rem;
     }
   }
 </style>

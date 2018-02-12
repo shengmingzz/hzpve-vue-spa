@@ -47,6 +47,9 @@ const itemdetail = r => require.ensure([], () => r(require('@/page/game/pvpitemd
 const infomain = r => require.ensure([], () => r(require('@/page/info/infomain')), 'infomain')
 const infodetail = r => require.ensure([], () => r(require('@/page/info/infodetail')), 'infodetail')
 
+// tv
+const tvmain = r => require.ensure([], () => r(require('@/page/tv/tvmain')), 'tvmain')
+
 const routes = [
   {
     path: '/',
@@ -95,7 +98,10 @@ const routes = [
 
       // info
       {path: '/infomain', component: infomain, meta: { title: '资讯' }},
-      {path: '/infodetail/:id', component: infodetail, meta: { title: '资讯详情' }}
+      {path: '/infodetail/:id', component: infodetail, meta: { title: '资讯详情' }},
+
+      // tv
+      {path: '/tvmain', component: tvmain, meta: { title: '直播' }}
     ]
   }
 ]
