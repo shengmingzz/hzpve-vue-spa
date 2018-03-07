@@ -50,6 +50,9 @@ const infodetail = r => require.ensure([], () => r(require('@/page/info/infodeta
 // tv
 const tvmain = r => require.ensure([], () => r(require('@/page/tv/tvmain')), 'tvmain')
 
+// forum
+const forummain = r => require.ensure([], () => r(require('@/page/forum/forummain')), 'forummain')
+
 const routes = [
   {
     path: '/',
@@ -101,7 +104,10 @@ const routes = [
       {path: '/infodetail/:id', component: infodetail, meta: { title: '资讯详情' }},
 
       // tv
-      {path: '/tvmain', component: tvmain, meta: { title: '直播' }}
+      {path: '/tvmain', component: tvmain, meta: { title: '直播' }},
+
+      // forum
+      {path: '/forummain', component: forummain, meta: { title: '贴吧' }}
     ]
   }
 ]

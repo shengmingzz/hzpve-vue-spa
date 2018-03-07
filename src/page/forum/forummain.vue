@@ -6,49 +6,33 @@
             <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">全部</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">虎牙</span>
+            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">图文</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">触手</span>
-        </div>
-        <div>
-            <span :class='{activity_show: changeShowType =="4"}' @click="changeShowType='4'">龙珠</span>
-        </div>
-        <div>
-            <span :class='{activity_show: changeShowType =="5"}' @click="changeShowType='5'">斗鱼</span>
+            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">短视频</span>
         </div>
     </section>
     <section class="container">
       <transition name="fade-choose">
         <section v-show="changeShowType ==='1'" v-if="changeShowType === '1'" class="item_container">
-          <tv-list class="item" type="0" refstr='tvzero'></tv-list>
+          <forum-sec class="item" type="0" refstr='forumzero'></forum-sec>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='2'" v-if="changeShowType === '2'" class="item_container">
-          <tv-list class="item" type="1" refstr='tvsec'></tv-list>
+          <forum-sec class="item" type="1" refstr='forumsec'></forum-sec>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='3'" v-if="changeShowType === '3'" class="item_container">
-          <tv-list class="item" type="2" refstr='tvthr'></tv-list>
-        </section>
-      </transition>
-      <transition name="fade-choose">
-        <section v-show="changeShowType ==='4'" v-if="changeShowType === '4'" class="item_container">
-          <tv-list class="item" type="3" refstr='tvfour'></tv-list>
-        </section>
-      </transition>
-      <transition name="fade-choose">
-        <section v-show="changeShowType ==='5'" v-if="changeShowType === '5'" class="item_container">
-          <tv-list class="item" type="4" refstr='tvfir'></tv-list>
+          <forum-sec class="item" type="2" refstr='forumthr'></forum-sec>
         </section>
       </transition>
     </section>
   </div>
 </template>
 <script>
-import tvList from './tvlist'
+import forumSec from './forumsec'
 // import infoList from './infoData'
 export default {
   data () {
@@ -56,9 +40,10 @@ export default {
       changeShowType: '1'
     }
   },
-  components: {tvList},
+  components: {forumSec},
   computed: {},
   created () {
+    this.code = this.$route.params.id
   },
   mounted () {
   },

@@ -1,6 +1,6 @@
 import fetch from './fetch'
 // import Md5 from '../config/Md5'
-import {devserverurl, htmlserverurl, devserverenurl} from './env'
+import {devserverurl, htmlserverurl} from './env'
 
 // let serverUrl = 'http://192.168.244.65:5000/api/graphql'
 let serverUrl = 'https://yhzs.99.com/api/graphql'
@@ -27,6 +27,18 @@ export function getNewsDetail (newsId) {
   return devbaseReq(params)
 }
 export function loadHtml (url) {
+  console.log(url)
+  // 开发模式下使用代理跨域
+  var useProxy = true
+  if (useProxy) {
+    var array = url.split('/')
+    console.log('/news' + '/' + array[array.length - 1])
+    return fetch({
+      url: '/news' + '/' + array[array.length - 1],
+      method: 'get',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+  }
   const data = {
     url: url,
     method: 'get'
@@ -114,25 +126,7 @@ export function getSwipNews () {
 /*
  * post--------------------------------------------------------------------------------------------------------------
  */
-/*
-* tv--------------------------------------------------------------------------------------------------------------
-*/
-// type huya chushou longzhu douyu recommend
-export function getTv (page, type) {
-  const data = {
-    url: 'https://mccos.99.com/live/data/getVideoList', // + '?page=' + page + '&type=' + type,
-    method: 'post',
-    params: {
-      'page': page,
-      'platform': type
-    }
-  }
-  return fetch({
-    url: devserverenurl,
-    method: 'post',
-    data
-  })
-}
+
 /*
  * --------------------------------------------------------------------------------------------------------------
  */
@@ -152,14 +146,33 @@ export function devStrBaseReq (query) {
   return devbaseReq(params)
 }
 export function devbaseReq (params) {
-  const data = {
+  // 开发模式下使用代理跨域
+  var useProxy = true
+  if (useProxy) {
+    return fetch({
+      url: '/graphqlapi',
+      method: 'post',
+      params
+    })
+  }
+  // 开发模式下使用中间服务器转发请求
+  var useThrServer = true
+  if (useThrServer) {
+    const data = {
+      url: serverUrl,
+      method: 'post',
+      params: params
+    }
+    return fetch({
+      url: devserverurl,
+      method: 'post',
+      data
+    })
+  }
+  // 直接发送请求
+  return fetch({
     url: serverUrl,
     method: 'post',
-    params: params
-  }
-  return fetch({
-    url: devserverurl,
-    method: 'post',
-    data
+    params
   })
 }

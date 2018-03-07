@@ -104,6 +104,9 @@ export default {
         this.html = '加载失败'
       })
     },
+    getComm () {
+      //
+    },
     hideLoading () {
       this.showLoading = false
     }

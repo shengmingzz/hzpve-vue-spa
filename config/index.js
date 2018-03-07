@@ -10,7 +10,30 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/graphqlapi': {
+        target: 'https://yhzs.99.com/api/graphql',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/graphqlapi': '/'
+        }
+      },
+      '/news': {
+        target: 'https://yhzs.99.com/news', // https://yhzs.99.com/news/5a9d026c4e8308337226f69f.html
+        changeOrigin: true,
+        pathRewrite: {
+          '^/news': '/'
+        }
+      },
+      '/tvapi': {
+        target: 'https://mccos.99.com/live/data/getVideoList',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/tvapi': '/'
+        }
+      },
+      // http://192.168.244.65:5000/news/5a5c2694fb9c6cd876b5f03f.html
+    },
 
     // Various Dev Server settings
     host: '192.168.244.71', // can be overwritten by process.env.HOST

@@ -1,15 +1,9 @@
 <template>
   <div class="page">
     <scroller :on-refresh="refresh" :onInfinite="loaderMore" :ref="refstr" refreshLayerColor="#333" loadingLayerColor="#333">
-      <ul v-if="dataArray.length" class="container">
-        <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="tvClick(item)" class="tvitem">
-          <img :src="item.cover" class="img">
-          <div class="info">
-            <div class="name">{{item.anchor}}</div>
-            <div class="online">{{item.online}}</div>
-          </div>
-          <img :src="item.avatar" class="avatar">
-          <div class="text">{{item.roomname}}</div>
+      <ul v-if="dataArray.length">
+        <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="forumClick(item)">
+          <info-cell :item="item"></info-cell>
         </section>
       </ul>
       <ul v-else class="animation_opactiy">
@@ -22,7 +16,8 @@
 </template>
 
 <script>
-import {getTv} from '../../api/tv'
+import {getForums} from '../../api/forum'
+import infoCell from './forumcell'
 
 export default {
   data () {
@@ -34,16 +29,16 @@ export default {
       showLoading: true, // 显示加载动画
       touchend: false, // 没有更多数据
       limit: 10,
-      code: 0,
-      page: 1
+      code: 0
     }
   },
   mounted () {
     this.$refs[this.refstr].triggerPullToRefresh()
   },
   components: {
+    infoCell
   },
-  props: ['type', 'refstr'],
+  props: ['type', 'refstr', 'stick'],
   computed: {
   },
   created () {
@@ -56,18 +51,16 @@ export default {
   methods: {
     // 下拉刷新
     refresh (done) {
-      var typestr = parseInt(this.type) === 0 ? 'recommend' : (parseInt(this.type) === 1 ? 'huya' : (parseInt(this.type) === 2 ? 'chushou' : (parseInt(this.type) === 3 ? 'longzhu' : 'douyu')))
-      getTv(1, typestr).then((response) => {
+      getForums(this.type, this.stick, 0, this.limit, '-createTime').then((response) => {
         done()
         this.preventRepeatReuqest = false
         let res = response.data
-        if (res.hasOwnProperty('dataset')) {
-          let data = res.dataset
-          this.dataArray = [...data.videolist]
-          this.isTouchend(data.videolist.length < this.limit)
+        if (res.hasOwnProperty('data')) {
+          let data = res.data
+          this.dataArray = [...data.forumPostList]
+          this.isTouchend(data.forumPostList.length < this.limit)
           this.showLoadMore()
         }
-        this.page++
       }).catch(error => {
         this.preventRepeatReuqest = false
         done()
@@ -76,6 +69,7 @@ export default {
     },
     // 到达底部加载更多数据
     loaderMore (done) {
+      let offset = this.dataArray.length
       if (this.touchend) {
         this.$refs[this.refstr].finishInfinite(2)
         return
@@ -85,18 +79,16 @@ export default {
         return
       }
       this.preventRepeatReuqest = true
-      var typestr = parseInt(this.type) === 0 ? 'recommend' : (parseInt(this.type) === 1 ? 'huya' : (parseInt(this.type) === 2 ? 'chushou' : (parseInt(this.type) === 3 ? 'longzhu' : 'douyu')))
-      getTv(this.page, typestr).then((response) => {
+      getForums(this.type, this.stick, offset, this.limit, '-createTime').then((response) => {
         done()
         this.preventRepeatReuqest = false
         let res = response.data
-        if (res.hasOwnProperty('dataset')) {
-          let data = res.dataset
-          this.dataArray = [...this.dataArray, ...data.videolist]
-          this.isTouchend(data.videolist.length < this.limit)
+        if (res.hasOwnProperty('data')) {
+          let data = res.data
+          this.dataArray = [...this.dataArray, ...data.forumPostList]
+          this.isTouchend(data.forumPostList.length < this.limit)
           this.showLoadMore()
         }
-        this.page++
       }).catch(error => {
         this.preventRepeatReuqest = false
         done()
@@ -114,8 +106,10 @@ export default {
       this.touchend = end
     },
     // 点击事件
-    tvClick (item) {
-      window.location.href = item.url
+    forumClick (item) {
+      console.log(item.id)
+      // this.$router.push({path: '/infodetail', query: {'id': item.id}})
+      this.$router.push({path: '/infodetail/' + item.id})
     }
   }
 }
@@ -179,68 +173,6 @@ export default {
       font-size: .7rem;
       text-align: center;
       margin-top: .5rem;
-    }
-  }
-  .container {
-      justify-content: 'space-around';
-      align-items: 'flex-start';
-      background-color: #eee;
-      display: flex;
-      flex-flow: row wrap;
-      align-content: flex-start;
-      margin: .2rem .3rem;
-    }
-  .tvitem {
-    width: 50%;
-    height: 6.5rem;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    .img {
-      margin-left: .2rem;
-      margin-right: .2rem;
-      height: 5rem;
-    }
-    .avatar {
-      position: absolute;
-      left:.2rem;
-      top: 4.3rem;
-      width: 1.4rem;
-      height: 1.4rem;
-      border-radius: .6rem;
-      overflow: hidden;
-    }
-    .text {
-      font-size: .5rem;
-      color: #333;
-      height: 1rem;
-      white-space: nowrap;
-      overflow: hidden;
-      margin-left: 1.8rem;
-      margin-right: .3rem;
-    }
-    .info {
-      position: absolute;
-      height: .8rem;
-      left:0.2rem;
-      top: 4.2rem;
-      right: 0.2rem;
-      background-color: rgba(0,0,0,.3);
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      .name {
-        margin-left: 1.6rem;
-        vertical-align: middle;
-        font-size: .25rem;
-        color: #fff;
-      }
-      .online {
-        margin-right: .5rem;
-        vertical-align: middle;
-        font-size: .25rem;
-        color: #fff;
-      }
     }
   }
 </style>
