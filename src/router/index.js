@@ -52,6 +52,7 @@ const tvmain = r => require.ensure([], () => r(require('@/page/tv/tvmain')), 'tv
 
 // forum
 const forummain = r => require.ensure([], () => r(require('@/page/forum/forummain')), 'forummain')
+const forumdetail = r => require.ensure([], () => r(require('@/page/forum/forumdetail')), 'forumdetail')
 
 const routes = [
   {
@@ -107,7 +108,8 @@ const routes = [
       {path: '/tvmain', component: tvmain, meta: { title: '直播' }},
 
       // forum
-      {path: '/forummain', component: forummain, meta: { title: '贴吧' }}
+      {path: '/forummain', component: forummain, meta: { title: '贴吧' }},
+      {path: '/forumdetail/:id', component: forumdetail, meta: { title: '帖子详情' }}
     ]
   }
 ]

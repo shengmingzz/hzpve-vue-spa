@@ -13,13 +13,26 @@ export function getForums (contentType, onlyAwesome, offset, limit, orderBy) {
   let query = 'forumPostList(orderBy:' + '"' + orderBy + '"' + ',offset:' + offset + ',limit:' + limit + ',contentType:' + contentType + ',onlyAwesome:' + stick + ')'
   query += postfullparamstr
   query = 'query{' + query + '}'
-  console.log(query)
   let params = {
     query: query
   }
   return devbaseReq(params)
 }
-
+// 帖子详情
+export function getForumDetail (forumId) {
+  // query{forumPostDetail(ForumPostId:\"%@\"){PostDetail{%@}}}
+  let query = 'forumPostDetail(ForumPostId:' + '"' + forumId + '"' + ')'
+  query += '{PostDetail' + postfullparamstr + '}'
+  return devStrBaseReq(query)
+}
+// 帖子回复列表
+export function getFloorList (postId, orderBy, offset, limit) {
+  let query = 'forumReplyAsFloorList(orderBy:' + '"' + orderBy + '"' + ',belongToOriPost:' + '"' + postId + '"' + ',offset:' + offset + ',limit:' + limit + ')'
+  query += postfullparamstr
+  console.log(query)
+  return devStrBaseReq(query)
+}
+// ---------------------------------------------------------------------------
 // 通过中间服务器进行请求api，跨域问题
 export function devStrBaseReq (query) {
   var str = 'query{' + query + '}'

@@ -11,7 +11,6 @@ export function getNews (offset, limit, type) {
   let query = 'normalNewsList(offset:' + offset + ',limit:' + limit + ',type:' + type + ')'
   query += '{id,title, pageUrl, writer{id, name}, thumbnail4Rec, keyWords, newsType, imageInContent, commentCount,likes}'
   query = 'query{' + query + '}'
-  // console.log(query)
   let params = {
     query: query
   }
@@ -56,7 +55,10 @@ export function getInfoComment (newsId, offset, limit, sortType) {
     sortstr = '-likes'
   }
   let query = '{comment(offset:' + offset + ',limit:' + limit + ',newsReplied:' + '"' + newsId + '"' + ',sortBy:' + '"' + sortstr + '"' + ',type:1){id,content,authorName,replyToComment{id,content,authorName},author{id,avatar,name,token,gameRole{roleId}}authorHeadPic,replyToUserName,belongToComment,createTime,likes,commentCount,subReply{id,content,authorName,replyToComment{id,content,authorName},author{id,avatar,name,token,gameRole{roleId}}authorHeadPic,replyToUserName,createTime,likes,commentCount}}}'
-  return devStrBaseReq(query)
+  let params = {
+    query: query
+  }
+  return devbaseReq(params)
 }
 // 资讯点赞
 export function favorNews (newsId, uid) {
@@ -143,6 +145,7 @@ export function devStrBaseReq (query) {
   let params = {
     query: str
   }
+  console.log(str)
   return devbaseReq(params)
 }
 export function devbaseReq (params) {

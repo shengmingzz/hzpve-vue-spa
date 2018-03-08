@@ -1,59 +1,68 @@
 <template>
   <div class="page">
-    <div class="infohtml" v-html="html">
-    </div>
-
-    <div v-if="item && item.keyWords">
-      <sec-header tip="关键字"></sec-header>
-      <div class="container">
-        <a v-for="(word,key) in item.keyWords" :key="key" class="keywords" @click="clickKeyword(word)">
-          <div >{{word}}</div>
-        </a>
+    <scroller style="background-color:#fff;" :on-refresh="refresh" :onInfinite="loaderMore" :ref="refstr" refreshLayerColor="#333" loadingLayerColor="#333">
+      <div class="infohtml" v-html="html">
       </div>
-    </div>
 
-    <div v-if="item && item.recommendNews">
-      <sec-header tip="推荐"></sec-header>
-      <div class="containerrec">
-        <a v-for="(recommend,key) in item.recommendNews" :key="key" class="recommend" @click="clickSuggest(recommend)">
-          <div >{{recommend.title}}</div>
-        </a>
+      <div v-if="item && item.keyWords">
+        <sec-header tip="关键字"></sec-header>
+        <div class="container">
+          <a v-for="(word,key) in item.keyWords" :key="key" class="keywords" @click="clickKeyword(word)">
+            <div >{{word}}</div>
+          </a>
+        </div>
       </div>
-    </div>
 
-    <div v-if="item && comms">
-      <sec-header tip="评论"></sec-header>
-      <div class="container">
-        <a v-for="(comm,key) in comms" :key="key" class="keywords" @click="clickComm(comm)">
-          <div >{{comm.content}}</div>
-        </a>
+      <div v-if="item && item.recommendNews">
+        <sec-header tip="推荐"></sec-header>
+        <div class="containerrec">
+          <a v-for="(recommend,key) in item.recommendNews" :key="key" class="recommend" @click="clickSuggest(recommend)">
+            <div >{{recommend.title}}</div>
+          </a>
+        </div>
       </div>
-    </div>
+
+      <div v-if="item && dataArray">
+        <sec-header tip="评论"></sec-header>
+        <div class="containerrec">
+          <section v-for="(comm,key) in dataArray" tag='li' :key="key" @click="clickComm(comm)">
+            <comm-cell :item="comm"></comm-cell>
+          </section>
+        </div>
+      </div>
+    </scroller>
   </div>
 </template>
 
 <script>
 import {loadMore} from '@/components/mixin'
 import loading from '@/components/loading'
-import {loadHtml, getNewsDetail} from '@/api/info'
+import {loadHtml, getNewsDetail, getInfoComment} from '@/api/info'
 import * as parse5 from 'parse5'
 import secHeader from '@/components/secHeader'
+import commCell from './infocommcell'
 
 export default {
   data () {
     return {
       html: '',
-      showLoading: false,
       newsId: '',
       item: null,
-      comms: []
+      dataArray: [],
+      preventRepeatReuqest: false, // 到达底部加载数据，防止重复加载
+      showBackStatus: false, // 显示返回顶部按钮
+      showLoading: false, // 显示加载动画
+      touchend: false, // 没有更多数据
+      limit: 10,
+      refstr: 'refstr'
     }
   },
   mounted () {
     this.getData()
+    this.$refs[this.refstr].triggerPullToRefresh()
   },
   components: {
-    loading, secHeader
+    loading, secHeader, commCell
   },
   mixins: [loadMore],
   props: [],
@@ -104,17 +113,75 @@ export default {
         this.html = '加载失败'
       })
     },
-    getComm () {
-      //
-    },
     hideLoading () {
       this.showLoading = false
+    },
+    // 下拉刷新
+    refresh (done) {
+      getInfoComment(this.newsId, 0, this.limit, 0).then((response) => {
+        console.log(response.data)
+        done()
+        this.preventRepeatReuqest = false
+        let res = response.data
+        if (res.hasOwnProperty('data')) {
+          let data = res.data
+          this.dataArray = [...data.comment]
+          this.isTouchend(data.comment.length < this.limit)
+          this.showLoadMore()
+        }
+      }).catch(error => {
+        this.preventRepeatReuqest = false
+        done()
+        console.log(error)
+      })
+    },
+    // 到达底部加载更多数据
+    loaderMore (done) {
+      let offset = this.dataArray.length
+      if (offset < this.limit) {
+        this.$refs[this.refstr].finishInfinite(1)
+        return
+      }
+      if (this.touchend) {
+        this.$refs[this.refstr].finishInfinite(2)
+        return
+      }
+      // 防止重复请求
+      if (this.preventRepeatReuqest) {
+        return
+      }
+      this.preventRepeatReuqest = true
+      getInfoComment(this.newsId, offset, this.limit, 0).then((response) => {
+        done()
+        this.preventRepeatReuqest = false
+        let res = response.data
+        if (res.hasOwnProperty('data')) {
+          let data = res.data
+          this.dataArray = [...this.dataArray, ...data.comment]
+          this.isTouchend(data.comment.length < this.limit)
+          this.showLoadMore()
+        }
+      }).catch(error => {
+        this.preventRepeatReuqest = false
+        done()
+        console.log(error)
+      })
+    },
+    showLoadMore () {
+      if (this.touchend) {
+        this.$refs[this.refstr].finishInfinite(2)
+      } else {
+        this.$refs[this.refstr].finishInfinite(0)
+      }
+    },
+    isTouchend (end) {
+      this.touchend = end
     }
   }
 }
 </script>
 
-<style>
+<style >
   @import './info.scss';
   .page {
         p, span{
@@ -124,8 +191,8 @@ export default {
         flex-direction: column;
     }
   .container {
-      justify-content: 'space-around';
-      align-items: 'flex-start';
+      justify-content: space-around;
+      align-items: flex-start;
       background-color: #fff;
       display: flex;
       flex-flow: row wrap;
@@ -146,7 +213,7 @@ export default {
   .containerrec {
     display: flex;
     flex-flow: column wrap;
-    background-color: #eee;
+    background-color: #fff;
     margin: .5rem .5rem .1rem .5rem;
   }
   .recommend {

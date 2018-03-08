@@ -25,7 +25,6 @@
 </template>
 <script>
 import forumList from './forumlist'
-// import infoList from './infoData'
 export default {
   data () {
     return {

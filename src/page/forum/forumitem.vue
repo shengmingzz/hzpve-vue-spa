@@ -4,7 +4,7 @@
       <img :src="hotIcon" class="hot" v-show="item.isAwesome" :style="hotStyle()">
       <img :src="topIcon" class="top" v-show="item.isFixedAtTop" :style="topStyle()">
       <!-- <h5 :style="authorStyle()">{{item.writer ? item.writer.name : ""}}</h5> -->
-      <h5 style="margin-left:.6rem;">{{item.replyCount}}评论</h5>
+      <h5 :style="authorStyle()">{{item.replyCount}}评论</h5>
     </div>
     <div class="right">
       <h5>4小时前</h5>
@@ -29,7 +29,7 @@ export default {
       return this.item.isFixedAtTop ? (this.item.isAwesome ? 'margin-let:0.4rem;width:1.4rem;height:0.7rem;' : 'margin-let:0rem;width:0rem;height:0rem;') : 'margin-let:0rem;width:0rem;height:0rem;'
     },
     authorStyle () {
-      return (!this.item.isFixedAtTop && !this.item.isAwesome) ? 'margin-left:0rem;' : 'margin-left:0.6rem;'
+      return (!this.item.isFixedAtTop && !this.item.isAwesome) ? 'margin-left:0rem;' : 'margin-left:0.4rem;'
     }
   }
 }

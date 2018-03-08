@@ -14,16 +14,16 @@
         </div>
         <info-item :item="item" class="item"></info-item>
       </div>
-      <img :src="item.thumbnail4Rec" :onerror="logo">
+      <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
     </div>
 
     <div v-if="cellType()==3" class="cellthrid">
       <div>{{item.title}}
       </div>
       <div class="imgs">
-        <img :src="item.thumbnail4Rec" :onerror="logo">
-        <img :src="item.thumbnail4Rec" :onerror="logo">
-        <img :src="item.thumbnail4Rec" :onerror="logo">
+        <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+        <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+        <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
       </div>
       <info-item :item="item" class="item3"></info-item>
     </div>
@@ -115,6 +115,7 @@ export default {
   width: 100%;
   .imgs {
     margin-top: .6rem;
+    width: 100%;
     @include fdja(row, space-between)
   }
   .item3 {

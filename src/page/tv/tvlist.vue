@@ -232,13 +232,13 @@ export default {
       .name {
         margin-left: 1.6rem;
         vertical-align: middle;
-        font-size: .25rem;
+        font-size: .5rem;
         color: #fff;
       }
       .online {
         margin-right: .5rem;
         vertical-align: middle;
-        font-size: .25rem;
+        font-size: .5rem;
         color: #fff;
       }
     }

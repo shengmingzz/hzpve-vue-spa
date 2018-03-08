@@ -1,6 +1,6 @@
 <template>
   <div class="cell">
-    <forum-header :item="item"></forum-header>
+    <forum-header :item="item.author"></forum-header>
     <div v-if="cellType()==0" class="cellnone">
       <div>{{item.title}}
       </div>
@@ -15,16 +15,16 @@
         </div>
         <forum-item :item="item" class="item"></forum-item>
       </div>
-      <img :src="item.imagesWith[0]" :onerror="logo">
+      <img :src="item.imagesWith[0] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
     </div>
 
     <div v-if="cellType()==3" class="cellthrid">
       <div>{{item.title}}
       </div>
       <div class="imgs">
-        <img :src="item.imagesWith[0]" :onerror="logo">
-        <img :src="item.imagesWith[1]" :onerror="logo">
-        <img :src="item.imagesWith[2]" :onerror="logo">
+        <img :src="item.imagesWith[0] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+        <img :src="item.imagesWith[1] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+        <img :src="item.imagesWith[2] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
       </div>
       <forum-item :item="item" class="item3"></forum-item>
     </div>
@@ -114,8 +114,10 @@ export default {
 .cellthrid {
   @include fdja(column, flex-start);
   width: 100%;
+  @include sc($firFontSize, $firFontColor);
   .imgs {
     margin-top: .6rem;
+    width: 100%;
     @include fdja(row, space-between)
   }
   .item3 {

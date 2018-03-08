@@ -108,8 +108,7 @@ export default {
     // 点击事件
     forumClick (item) {
       console.log(item.id)
-      // this.$router.push({path: '/infodetail', query: {'id': item.id}})
-      this.$router.push({path: '/infodetail/' + item.id})
+      this.$router.push({path: '/forumdetail/' + item.id})
     }
   }
 }
