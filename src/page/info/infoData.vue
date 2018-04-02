@@ -1,7 +1,7 @@
 <template>
   <div class="infolist_container" >
     <section id="scroll_section" class="scroll_container">
-      <ul v-load-more="loaderMoreData()" v-if="dataArray.length" type="1">
+      <ul  v-if="dataArray.length" type="1">
         <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
           <info-cell :item="item"></info-cell>
         </section>
@@ -76,12 +76,23 @@ export default {
           this.showBackStatus = status
         })
         this.$nextTick(() => {
-          this.infoScroll = new BScroll('#scroll_section', {
-            deceleration: 0.001,
-            bounce: true,
-            click: true,
-            swipeTime: 1800
-          })
+          // this.infoScroll = new BScroll('#scroll_section', {
+          //   deceleration: 0.001,
+          //   bounce: true,
+          //   click: true,
+          //   swipeTime: 1800
+          // })
+          if (!this.scroll) {
+            this.infoScroll = new BScroll('#scroll_section', {})
+            this.infoScroll.on('touchend', (pos) => {
+              // 下拉动作
+              if (pos.y > 50) {
+                this.refresh()
+              }
+            })
+          } else {
+            this.infoScroll.refresh()
+          }
         })
       }).catch(error => {
         this.hideLoading()

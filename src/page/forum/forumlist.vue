@@ -2,7 +2,7 @@
   <div class="page">
     <scroller :on-refresh="refresh" :onInfinite="loaderMore" :ref="refstr" refreshLayerColor="#333" loadingLayerColor="#333">
       <ul v-if="dataArray.length">
-        <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="infoClick(item)">
+        <section v-for="(item,key) in dataArray" tag='li' :key="key" @click="forumClick(item)">
           <info-cell :item="item"></info-cell>
         </section>
       </ul>
@@ -16,9 +16,8 @@
 </template>
 
 <script>
-import {getNews} from '../../api/info'
-import infoCell from './infocell'
-// import Md5 from '../../config/Md5'
+import {getForums} from '../../api/forum'
+import infoCell from './forumcell'
 
 export default {
   data () {
@@ -39,15 +38,11 @@ export default {
   components: {
     infoCell
   },
-  props: ['type', 'refstr'],
+  props: ['type', 'refstr', 'stick'],
   computed: {
   },
   created () {
     this.code = this.type
-    // var date = Date.parse(new Date())
-    // var md5 = Md5.hex_md5('ZRpyN4zTxb9ualwA!mvj2fP$&@BoWGEF' + parseInt(date / 1000))
-    // console.log(date)
-    // console.log(md5)
   },
   watch: {
     '$route' (to, from) {
@@ -56,14 +51,14 @@ export default {
   methods: {
     // 下拉刷新
     refresh (done) {
-      getNews(0, this.limit, this.type).then((response) => {
+      getForums(this.type, this.stick, 0, this.limit, '-createTime').then((response) => {
         done()
         this.preventRepeatReuqest = false
         let res = response.data
         if (res.hasOwnProperty('data')) {
           let data = res.data
-          this.dataArray = [...data.normalNewsList]
-          this.isTouchend(data.normalNewsList.length < this.limit)
+          this.dataArray = [...data.forumPostList]
+          this.isTouchend(data.forumPostList.length < this.limit)
           this.showLoadMore()
         }
       }).catch(error => {
@@ -84,16 +79,15 @@ export default {
         return
       }
       this.preventRepeatReuqest = true
-      getNews(offset, this.limit, this.type).then((response) => {
+      getForums(this.type, this.stick, offset, this.limit, '-createTime').then((response) => {
         done()
         this.preventRepeatReuqest = false
         let res = response.data
         if (res.hasOwnProperty('data')) {
           let data = res.data
-          this.dataArray = [...this.dataArray, ...data.normalNewsList]
-          this.isTouchend(data.normalNewsList.length < this.limit)
+          this.dataArray = [...this.dataArray, ...data.forumPostList]
+          this.isTouchend(data.forumPostList.length < this.limit)
           this.showLoadMore()
-          // console.log(JSON.stringify(data.normalNewsList))
         }
       }).catch(error => {
         this.preventRepeatReuqest = false
@@ -112,10 +106,9 @@ export default {
       this.touchend = end
     },
     // 点击事件
-    infoClick (item) {
+    forumClick (item) {
       console.log(item.id)
-      // this.$router.push({path: '/infodetail', query: {'id': item.id}})
-      this.$router.push({path: '/infodetail/' + item.id})
+      this.$router.push({path: '/forumdetail/' + item.id})
     }
   }
 }

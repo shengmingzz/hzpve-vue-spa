@@ -1,9 +1,10 @@
 <template>
   <div class="cell">
+    <forum-header :item="item.author"></forum-header>
     <div v-if="cellType()==0" class="cellnone">
       <div>{{item.title}}
       </div>
-      <info-item :item="item" class="item0"></info-item>
+      <forum-item :item="item" class="item0"></forum-item>
     </div>
 
     <div v-if="cellType()==1" class="cellone">
@@ -12,26 +13,27 @@
           <div>{{item.title}}
           </div>
         </div>
-        <info-item :item="item" class="item"></info-item>
+        <forum-item :item="item" class="item"></forum-item>
       </div>
-      <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+      <img :src="item.imagesWith[0] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
     </div>
 
     <div v-if="cellType()==3" class="cellthrid">
       <div>{{item.title}}
       </div>
       <div class="imgs">
-        <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
-        <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
-        <img :src="item.thumbnail4Rec + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+        <img :src="item.imagesWith[0] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+        <img :src="item.imagesWith[1] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
+        <img :src="item.imagesWith[2] + '?imageView2/1/w/200/h/150/interlace/1'" :onerror="logo">
       </div>
-      <info-item :item="item" class="item3"></info-item>
+      <forum-item :item="item" class="item3"></forum-item>
     </div>
   </div>
 </template>
 
 <script>
-import infoItem from './infoItem'
+import forumItem from './forumitem'
+import forumHeader from './forumheader'
 var _ = require('lodash-node')
 export default {
   data () {
@@ -41,18 +43,16 @@ export default {
   },
   props: ['item'],
   components: {
-    infoItem
+    forumItem,
+    forumHeader
   },
   methods: {
     cellType () {
-      var data = this.item.imageInContent
+      var data = this.item.imagesWith
       if (_.isArray(data) && data.length > 0) {
         if (data.length >= 3) {
           return 3
         }
-        return 1
-      }
-      if (this.item.thumbnail4Rec) {
         return 1
       }
       return 0
@@ -64,7 +64,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../style/mixin';
 .cell {
-  padding: .6rem .6rem .6rem .6rem;
+  padding: .2rem .6rem .6rem .6rem;
   @include bottomline;
   width: 100%;
   h4 {
@@ -82,6 +82,7 @@ export default {
   width: 100%;
   div {
     text-align: left;
+    @include sc($firFontSize, $firFontColor);
   }
   .item0 {
     margin-top: .6rem;
@@ -113,6 +114,7 @@ export default {
 .cellthrid {
   @include fdja(column, flex-start);
   width: 100%;
+  @include sc($firFontSize, $firFontColor);
   .imgs {
     margin-top: .6rem;
     width: 100%;

@@ -3,6 +3,7 @@ let env = 'pro'
 let useLocalMiddleserver = true
 
 let devserverurl = 'http://192.168.244.71:1324/api/thrid/post'
+let devserverenurl = 'http://192.168.244.71:1324/api/thrid/enpost'
 let htmlserverurl = 'http://192.168.244.71:1324/api/thrid/getHtml'
 
 function getServerUrl () {
@@ -44,6 +45,7 @@ export {
   getServerUrl,
   getSignKey,
   devserverurl,
+  devserverenurl,
   isUseThirdServer,
   getRouteBase,
   htmlserverurl

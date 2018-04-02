@@ -35,9 +35,10 @@ const xzsllocal = r => require.ensure([], () => r(require('@/page/xzsl/xzsllocal
 const mxzllocal = r => require.ensure([], () => r(require('@/page/mxzl/mxzllocal')), 'mxzllocal')
 const yxtjlocal = r => require.ensure([], () => r(require('@/page/yxtj/yxtjlocal')), 'yxtjlocal')
 const herolocal = r => require.ensure([], () => r(require('@/page/hero/herolocal')), 'herolocal')
-const home = r => require.ensure([], () => r(require('@/page/home/home')), 'home')
 
 // pvp local
+const pvpmain = r => require.ensure([], () => r(require('@/page/game/pvpmain')), 'pvpmain')
+const pvemain = r => require.ensure([], () => r(require('@/page/game/pvemain')), 'pvemain')
 const pvphero = r => require.ensure([], () => r(require('@/page/game/pvphero')), 'pvphero')
 const pvpheroitem = r => require.ensure([], () => r(require('@/page/game/pvpheroitem')), 'pvpheroitem')
 const pvpitem = r => require.ensure([], () => r(require('@/page/game/pvpitem')), 'pvpitem')
@@ -45,13 +46,24 @@ const itemdetail = r => require.ensure([], () => r(require('@/page/game/pvpitemd
 
 // info
 const infomain = r => require.ensure([], () => r(require('@/page/info/infomain')), 'infomain')
+const infodetail = r => require.ensure([], () => r(require('@/page/info/infodetail')), 'infodetail')
 
+// tv
+const tvmain = r => require.ensure([], () => r(require('@/page/tv/tvmain')), 'tvmain')
+
+// forum
+const forummain = r => require.ensure([], () => r(require('@/page/forum/forummain')), 'forummain')
+const forumdetail = r => require.ensure([], () => r(require('@/page/forum/forumdetail')), 'forumdetail')
+
+// root
+const root = r => require.ensure([], () => r(require('@/page/home/root')), 'root')
+const home = r => require.ensure([], () => r(require('@/page/home/home')), 'home')
 const routes = [
   {
     path: '/',
     name: 'App',
     component: App,
-    redirect: '/home',
+    redirect: '/root',
     meta: [],
     children: [
       // hdyj
@@ -85,15 +97,25 @@ const routes = [
       {path: '/herolocal', component: herolocal, meta: { title: '英雄详情' }},
       // home
       {path: '/home', component: home},
-
+      {path: '/root', component: root},
       // pvp
+      {path: '/pvpmain', component: pvpmain, meta: { keepAlive: true, title: 'pvp' }}, // pvpmain
+      {path: '/pvemain', component: pvemain, meta: { keepAlive: true, title: 'pve' }}, // pvemain
       {path: '/pvphero', component: pvphero, meta: { keepAlive: true, title: 'pvp英雄' }}, // pvphero
       {path: '/pvphero/:id', component: pvpheroitem, meta: { title: 'pvp英雄详情' }},
       {path: '/pvpitem', component: pvpitem, meta: { keepAlive: true, title: 'pvp物品' }}, // pvpitem
       {path: '/pvpitem/:id', component: itemdetail, meta: { title: 'pvp物品详情' }},
 
       // info
-      {path: '/infomain', component: infomain, meta: { title: '资讯' }}
+      {path: '/infomain', component: infomain, meta: { keepAlive: true, title: '资讯' }},
+      {path: '/infodetail/:id', component: infodetail, meta: { title: '资讯详情' }},
+
+      // tv
+      {path: '/tvmain', component: tvmain, meta: { keepAlive: true, title: '直播' }},
+
+      // forum
+      {path: '/forummain', component: forummain, meta: { keepAlive: true, title: '贴吧' }},
+      {path: '/forumdetail/:id', component: forumdetail, meta: { title: '帖子详情' }}
     ]
   }
 ]

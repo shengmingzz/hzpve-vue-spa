@@ -3,37 +3,53 @@
 
     <section class="change_show_type" ref="chooseType">
         <div>
-            <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">最新</span>
+            <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">英雄图鉴</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">视频</span>
+            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">星座试炼</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">公告</span>
+            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">混沌遗迹</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="4"}' @click="changeShowType='4'">新闻</span>
+            <span :class='{activity_show: changeShowType =="4"}' @click="changeShowType='4'">英魂祭坛</span>
+        </div>
+        <div>
+            <span :class='{activity_show: changeShowType =="5"}' @click="changeShowType='5'">冒险之旅</span>
+        </div>
+        <div>
+            <span :class='{activity_show: changeShowType =="6"}' @click="changeShowType='6'">竞技场</span>
         </div>
     </section>
     <section class="container">
       <transition name="fade-choose">
         <section v-show="changeShowType ==='1'" v-if="changeShowType === '1'" class="item_container">
-          <info-list class="item" type="0" refstr='infozero'></info-list>
+          <yxtj-local class="item" type="0" refstr='infozero'></yxtj-local>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='2'" v-if="changeShowType === '2'" class="item_container">
-          <info-list class="item" type="2" refstr='infosec'></info-list>
+          <xzsl-local class="item" type="1" refstr='infosec'></xzsl-local>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='3'" v-if="changeShowType === '3'" class="item_container">
-          <info-list class="item" type="3" refstr='infothr'></info-list>
+          <hdyj-local class="item" type="1" refstr='infosec'></hdyj-local>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='4'" v-if="changeShowType === '4'" class="item_container">
-          <info-list class="item" type="1" refstr='infofir'></info-list>
+          <yhjt-local class="item" type="1" refstr='infosec'></yhjt-local>
+        </section>
+      </transition>
+      <transition name="fade-choose">
+        <section v-show="changeShowType ==='5'" v-if="changeShowType === '5'" class="item_container">
+          <mxzl-local class="item" type="1" refstr='infosec'></mxzl-local>
+        </section>
+      </transition>
+      <transition name="fade-choose">
+        <section v-show="changeShowType ==='6'" v-if="changeShowType === '6'" class="item_container">
+          <jjc-local class="item" type="1" refstr='infosec'></jjc-local>
         </section>
       </transition>
     </section>
@@ -41,7 +57,12 @@
   </div>
 </template>
 <script>
-import infoList from './infolist'
+import jjcLocal from '../jjc/jjclocal'
+import mxzlLocal from '../mxzl/mxzllocal'
+import xzslLocal from '../xzsl/xzsllocal'
+import yhjtLocal from '../yhjt/yhjt'
+import yxtjLocal from '../yxtj/yxtjlocal'
+import hdyjLocal from '../hdyj/hdyjlocal'
 // import infoList from './infoData'
 import footGuide from '../home/foot'
 export default {
@@ -50,7 +71,7 @@ export default {
       changeShowType: '1'
     }
   },
-  components: {infoList, footGuide},
+  components: {jjcLocal, mxzlLocal, xzslLocal, yhjtLocal, yxtjLocal, hdyjLocal, footGuide},
   computed: {},
   created () {
     this.code = this.$route.params.id

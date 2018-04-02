@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <scroller :on-refresh="refresh" :on-infinite="infinite" ref="myscroller" refreshLayerColor="#0f0" loadingLayerColor="#0f0">
+    <scroller :on-refresh="refresh" ref="myscroller" >
     <!-- <section id="scroll_section" class="scroll_section"> -->
       <div style="margin-top:1rem;"></div>
       <div>
@@ -103,11 +103,11 @@ export default {
 <style scoped>
 .page{
 		position: absolute;
-		top: 0;
+		top: 2.2rem;
 		left: 0;
     right: 0;
     bottom: 0;
-		background-color: #f00;
+		background-color: #fff;
 		/*z-index: 102;*/
 	}
 .scroll_section {
