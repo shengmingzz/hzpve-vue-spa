@@ -103,7 +103,7 @@ export default {
 <style scoped>
 .page{
 		position: absolute;
-		top: 0;
+		top: 2.2rem;
 		left: 0;
     right: 0;
     bottom: 0;

@@ -37,18 +37,20 @@
         </section>
       </transition>
     </section>
+    <foot-guide></foot-guide>
   </div>
 </template>
 <script>
 import infoList from './infolist'
 // import infoList from './infoData'
+import footGuide from '../home/foot'
 export default {
   data () {
     return {
       changeShowType: '1'
     }
   },
-  components: {infoList},
+  components: {infoList, footGuide},
   computed: {},
   created () {
     this.code = this.$route.params.id

@@ -3,45 +3,53 @@
 
     <section class="change_show_type" ref="chooseType">
         <div>
-            <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">全部</span>
+            <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">英雄图鉴</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">虎牙</span>
+            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">星座试炼</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">触手</span>
+            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">混沌遗迹</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="4"}' @click="changeShowType='4'">龙珠</span>
+            <span :class='{activity_show: changeShowType =="4"}' @click="changeShowType='4'">英魂祭坛</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="5"}' @click="changeShowType='5'">斗鱼</span>
+            <span :class='{activity_show: changeShowType =="5"}' @click="changeShowType='5'">冒险之旅</span>
+        </div>
+        <div>
+            <span :class='{activity_show: changeShowType =="6"}' @click="changeShowType='6'">竞技场</span>
         </div>
     </section>
     <section class="container">
       <transition name="fade-choose">
         <section v-show="changeShowType ==='1'" v-if="changeShowType === '1'" class="item_container">
-          <tv-list class="item" type="0" refstr='tvzero'></tv-list>
+          <yxtj-local class="item" type="0" refstr='infozero'></yxtj-local>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='2'" v-if="changeShowType === '2'" class="item_container">
-          <tv-list class="item" type="1" refstr='tvsec'></tv-list>
+          <xzsl-local class="item" type="1" refstr='infosec'></xzsl-local>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='3'" v-if="changeShowType === '3'" class="item_container">
-          <tv-list class="item" type="2" refstr='tvthr'></tv-list>
+          <hdyj-local class="item" type="1" refstr='infosec'></hdyj-local>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='4'" v-if="changeShowType === '4'" class="item_container">
-          <tv-list class="item" type="3" refstr='tvfour'></tv-list>
+          <yhjt-local class="item" type="1" refstr='infosec'></yhjt-local>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='5'" v-if="changeShowType === '5'" class="item_container">
-          <tv-list class="item" type="4" refstr='tvfir'></tv-list>
+          <mxzl-local class="item" type="1" refstr='infosec'></mxzl-local>
+        </section>
+      </transition>
+      <transition name="fade-choose">
+        <section v-show="changeShowType ==='6'" v-if="changeShowType === '6'" class="item_container">
+          <jjc-local class="item" type="1" refstr='infosec'></jjc-local>
         </section>
       </transition>
     </section>
@@ -49,7 +57,12 @@
   </div>
 </template>
 <script>
-import tvList from './tvlist'
+import jjcLocal from '../jjc/jjclocal'
+import mxzlLocal from '../mxzl/mxzllocal'
+import xzslLocal from '../xzsl/xzsllocal'
+import yhjtLocal from '../yhjt/yhjt'
+import yxtjLocal from '../yxtj/yxtjlocal'
+import hdyjLocal from '../hdyj/hdyjlocal'
 // import infoList from './infoData'
 import footGuide from '../home/foot'
 export default {
@@ -58,9 +71,10 @@ export default {
       changeShowType: '1'
     }
   },
-  components: {tvList, footGuide},
+  components: {jjcLocal, mxzlLocal, xzslLocal, yhjtLocal, yxtjLocal, hdyjLocal, footGuide},
   computed: {},
   created () {
+    this.code = this.$route.params.id
   },
   mounted () {
   },

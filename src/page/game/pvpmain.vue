@@ -3,29 +3,21 @@
 
     <section class="change_show_type" ref="chooseType">
         <div>
-            <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">全部</span>
+            <span :class='{activity_show: changeShowType =="1"}' @click="changeShowType='1'">pvp英雄</span>
         </div>
         <div>
-            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">图文</span>
-        </div>
-        <div>
-            <span :class='{activity_show: changeShowType =="3"}' @click="changeShowType='3'">短视频</span>
+            <span :class='{activity_show: changeShowType =="2"}' @click="changeShowType='2'">pvp物品</span>
         </div>
     </section>
     <section class="container">
       <transition name="fade-choose">
         <section v-show="changeShowType ==='1'" v-if="changeShowType === '1'" class="item_container">
-          <forum-sec class="item" type="0" refstr='forumzero'></forum-sec>
+          <pvp-hero class="item" type="0" refstr='infozero'></pvp-hero>
         </section>
       </transition>
       <transition name="fade-choose">
         <section v-show="changeShowType ==='2'" v-if="changeShowType === '2'" class="item_container">
-          <forum-sec class="item" type="1" refstr='forumsec'></forum-sec>
-        </section>
-      </transition>
-      <transition name="fade-choose">
-        <section v-show="changeShowType ==='3'" v-if="changeShowType === '3'" class="item_container">
-          <forum-sec class="item" type="2" refstr='forumthr'></forum-sec>
+          <pvp-item class="item" type="1" refstr='infosec'></pvp-item>
         </section>
       </transition>
     </section>
@@ -33,7 +25,8 @@
   </div>
 </template>
 <script>
-import forumSec from './forumsec'
+import pvpItem from './pvpitem'
+import pvpHero from './pvphero'
 // import infoList from './infoData'
 import footGuide from '../home/foot'
 export default {
@@ -42,7 +35,7 @@ export default {
       changeShowType: '1'
     }
   },
-  components: {forumSec, footGuide},
+  components: {pvpItem, pvpHero, footGuide},
   computed: {},
   created () {
     this.code = this.$route.params.id
