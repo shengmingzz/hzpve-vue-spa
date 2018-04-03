@@ -4,3 +4,6 @@
 /*.js
 /test/unit/coverage/
 /src/page/data/*.js
+/src/components/tab-container/dom.js
+/src/config/*.js
+src/components/mixin.js
