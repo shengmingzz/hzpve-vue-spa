@@ -6,25 +6,25 @@
 </template>
 
 <script>
-  import footGuide from './foot'
+import footGuide from './foot'
 
-  export default {
-    data () {
-      return {
-
-      }
-    },
-    created () {
-
-    },
-    components: {
-      footGuide
-    },
-    props: [],
-    methods: {
+export default {
+  data () {
+    return {
 
     }
+  },
+  created () {
+
+  },
+  components: {
+    footGuide
+  },
+  props: [],
+  methods: {
+
   }
+}
 </script>
 
 <style>
